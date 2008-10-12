@@ -1,0 +1,39 @@
+********** Note *************
+This software is being published under GNU GPL license that means it comes with no warranty, so use at your own risk.
+
+
+********* Usage *************
+- You need PHP 5.x to run this class.
+This class is very easy to use just take a look at test.php to understand how you should use it.
+You must read the "WHM XML API Document" before using this class: 
+http://www.cpanel.net/plugins/xmlapi/index.html
+You can see the inputs and outputs of each function in the page above.
+I have implemented the functions listed below, other functions will be implemented in the next version.
+
+******List of implemented functions******
+- version()
+- gethostname()
+- listaccts ()
+- listPkgs()
+- createAccount($acctDomain,$acctUser,$acctPass,$acctPackg)
+- accountsummary($accUser)
+- passwd($accUser,$pass)
+- suspend($acctUser,$reason)
+- unsuspend($acctUser)
+- terminate($acctUser,$keepDns=0)
+- changepackage($accUser,$pkg)
+
+****** FAQ *********
+
+Q. I'm getting warning like "Warning: SimpleXMLElement::__construct()...." what is the problem?
+A. You did not enter the correct "username" or "whm host" or "whm hash" in the init() function and the class has not been initilized correctly.
+
+Q.I'm getting this error while creating a new account "You do not have access to create that package (package_name)!" what is the problem
+A.You have entered a package name that do not exist in your whm account.
+
+******* Contact *********
+Send your comments and questions to this email address:  arash.hemmat _\/_at_/\_  gmail.com
+
+
+Arash Hemmat 
+Tuesday, September 25 2007
