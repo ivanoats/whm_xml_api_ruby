@@ -1,0 +1,16 @@
+<limitbw>
+  <result>
+    <bwlimit>
+    <bwlimit>1048576</bwlimit>
+    <bwlimitenable>0</bwlimitenable>
+    <domains>domain.tld</domains>
+    <domains>domain2.tld</domains>
+    <humanbw_limit>1 MB</human_bwlimit>
+    <humanbw_used>none</human_bwused>
+    <unlimited>0</unlimited>
+    </bwlimit>
+    <status>1</status>
+    <statusmsg>Bandwidth Limit for username set to 1</statusmsg>
+  </result>
+</limitbw>
+<!-- i copied this one from http://www.cpanel.net/plugins/xmlapi/limitbw.html -->

@@ -1,0 +1,54 @@
+<listaccts>
+  <acct>
+    <disklimit>100M</disklimit>
+    <diskused>50M</diskused>
+    <domain>customer1.com</domain>
+    <email>customer1@example.com</email>
+    <ip>2.2.2.2</ip>
+    <owner>owner</owner>
+    <partition>home</partition>
+    <plan>plan_one</plan>
+    <startdate>10 Jan 30 21:19</startdate>
+    <suspended>0</suspended>
+    <suspendreason>not suspended</suspendreason>
+    <theme>x3</theme>
+    <unix_startdate>1033026362</unix_startdate>
+    <user>customer1</user>
+  </acct>
+  <acct>
+    <disklimit>1000M</disklimit>
+    <diskused>45M</diskused>
+    <domain>customer2.com</domain>
+    <email>customer2@example.com</email>
+    <ip>255.255.255.255</ip>
+    <owner>owner</owner>
+    <partition>home</partition>
+    <plan>plan_two</plan>
+    <startdate>08 Feb 02 20:41</startdate>
+    <suspended>0</suspended>
+    <suspendreason>not suspended</suspendreason>
+    <theme>x3</theme>
+    <unix_startdate>1034060887</unix_startdate>
+    <user>customer2</user>
+  </acct>
+  <acct>
+    <disklimit>1000M</disklimit>
+    <diskused>0M</diskused>
+    <domain>badcustomer.com</domain>
+    <email>badcustomer@example.net</email>
+    <ip>1.2.3.4</ip>
+    <owner>owner</owner>
+    <partition>home</partition>
+    <plan>plan_three</plan>
+    <startdate>02 Feb 01 10:20</startdate>
+    <suspended>1</suspended>
+    <suspendreason>excessive use of magic fairy dust</suspendreason>
+    <theme>x3</theme>
+    <unix_startdate>1033850806</unix_startdate>
+    <user>badcustomer</user>
+  </acct>
+  <status>1</status>
+  <statusmsg>Ok</statusmsg>
+</listaccts>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

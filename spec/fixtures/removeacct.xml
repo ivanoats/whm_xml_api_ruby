@@ -1,0 +1,21 @@
+<removeacct>
+  <result>
+    <rawout>Running pre removal script (/scripts/prekillacct)......DoneCollecting Domain Name and IP...User: user
+Domain: example.com
+...DoneKilling all processes owned by user......DoneCleaning passwd,shadow,group......DoneRemoving User from Group..........DoneRemoving Web Logs......DoneRemoving Crontab......DoneRemoving Virtual Hosts...Removed Extra Entries from httpd.conf
+example.com not found in httpd.conf.
+...DoneRemoving PostgreSQL databases and users......DoneRemoving System User......DoneRemoving Group......DoneRemoving DNS Entries...example.com =&gt; deleted from r15. 
+...DoneRemoving Email Setup...Removing /etc/valiases/example.com
+...DoneRemoving mailman lists......DoneRemoving MySQL databases and users......DoneRemoving remotedomains,secondarymx,localdomains entries......DoneRemoving Counter Data......DoneAdding ip back to the ip address pool...System has 0 free ips.
+...DoneRemoving user's cPanel Databases &amp; Updating......DoneReloading Services......DoneRemoving mail and service configs...
+...DoneSending Contacts......DoneUpdating internal databases...Updating ftp passwords for user
+Purging ftp user user
+Ftp password files updated.
+Ftp vhost passwords synced
+...DoneRunning post removal scripts (/scripts/legacypostkillacct, /scripts/postkillacct)......DoneAccount Removal Complete!!!...user account removed...Done</rawout>
+    <status>1</status>
+    <statusmsg>user account removed</statusmsg>
+  </result>
+</removeacct>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

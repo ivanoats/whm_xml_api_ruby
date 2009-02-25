@@ -1,0 +1,27 @@
+<changepackage>
+  <result>
+    <rawout>&lt;pre&gt;
+Changing bwlimit to 30000 Meg
+Changing Feature List to default
+Changing max pop accounts from unlimited to unlimited
+Changing max sql accounts from unlimited to unlimited
+Changing max ftp accounts from unlimited to unlimited
+Changing max lists from unlimited to unlimited
+Changing max sub domains from unlimited to unlimited
+Changing language from english to english
+Changing max parked domains from unlimited to unlimited
+Changing max addon domains from unlimited to unlimited
+Removing shell access
+Shell already set to /usr/local/cpanel/bin/noshell
+Changing cpanel module from x3 to x3
+Changing plan from old_plan to new_plan
+Resetting QUOTA....
+Using Quota v3 Support
+Bandwidth limit (31457280000) is lower than (unlimited) (all limits removed)&lt;br /&gt;&lt;blockquote&gt;&lt;div style='float:left;'&gt;Enabling...&lt;/div&gt;&lt;div style='float:left;'&gt;...user.example.com...&lt;/div&gt;&lt;div style='float:left;'&gt;Done&lt;/div&gt;&lt;/blockquote&gt;&lt;br /&gt;&lt;div class='clearit' style='clear:both; width:80%;'&gt;&amp;nbsp;&lt;/div&gt;&lt;span class=&quot;b2&quot;&gt;Warning, this will not cause ip-less accounts to become ip access, or the reverse.&lt;/span&gt;
+</rawout>
+    <status>1</status>
+    <statusmsg>Account Upgrade/Downgrade Complete for user</statusmsg>
+  </result>
+</changepackage>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

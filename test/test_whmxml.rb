@@ -3,7 +3,7 @@ require 'whmxml'
 
 class TestWhmxml < Test::Unit::TestCase
   def setup
-     @x = Whmxml.new('www.sustainablewebsites.com',2087,'username','password')
+    @x = Whmxml.new('www.sustainablewebsites.com',2087,'username','password')
   end
   
   # you will have to put in the correct hostname from the server

@@ -1,0 +1,26 @@
+<suspendacct>
+  <result>
+    <status>1</status>
+    <statusmsg>&lt;script&gt;if (self['clear_ui_status']) { clear_ui_status(); }&lt;/script&gt;
+Changing Shell to /bin/false...Changing shell for user.
+Warning: &quot;/bin/false&quot; is not listed in /etc/shells
+Shell changed.
+Done
+Locking Password...Locking password for user user.
+passwd: Success
+Done
+Suspending mysql users
+Notification =&gt; system@example.com via EMAIL [level =&gt; 3]
+Using Quota v3 Support
+Suspended document root /home/user/public_html
+Using Quota v3 Support
+Suspending FTP accounts...
+Updating ftp passwords for user
+Ftp password files updated.
+Ftp vhost passwords synced
+user's account has been suspended
+</statusmsg>
+  </result>
+</suspendacct>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

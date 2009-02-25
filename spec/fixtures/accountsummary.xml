@@ -1,0 +1,22 @@
+<accountsummary>
+  <acct>
+    <disklimit>100M</disklimit>
+    <diskused>2M</diskused>
+    <domain>magic.example.com</domain>
+    <email>magic@example.com</email>
+    <ip>1.2.3.4</ip>
+    <owner>owner</owner>
+    <partition>home</partition>
+    <plan>plan</plan>
+    <startdate>10 Feb 10 10:10</startdate>
+    <suspended>0</suspended>
+    <suspendreason>not suspended</suspendreason>
+    <theme>x3</theme>
+    <unix_startdate>1234567890</unix_startdate>
+    <user>magic</user>
+  </acct>
+  <status>1</status>
+  <statusmsg>Ok</statusmsg>
+</accountsummary>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

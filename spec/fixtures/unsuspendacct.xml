@@ -1,0 +1,20 @@
+<unsuspendacct>
+  <result>
+    <status>1</status>
+    <statusmsg>&lt;script&gt;if (self['clear_ui_status']) { clear_ui_status(); }&lt;/script&gt;
+Changing shell for user.
+Shell changed.
+Unlocking password for user user.
+passwd: Success.
+Unsuspending FTP accounts...
+Updating ftp passwords for user
+Ftp password files updated.
+Ftp vhost passwords synced
+user's account is now active
+Unsuspending mysql users
+Notification =&gt; system@example.com via EMAIL [level =&gt; 3]
+</statusmsg>
+  </result>
+</unsuspendacct>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

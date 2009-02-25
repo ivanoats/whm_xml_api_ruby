@@ -1,0 +1,60 @@
+<createacct>
+  <result>
+    <options>
+      <ip>0.0.0.0</ip>
+      <nameserver>ns100.example.com</nameserver>
+      <nameserver2>ns102.example.com</nameserver2>
+      <nameserver3></nameserver3>
+      <nameserver4></nameserver4>
+      <nameservera></nameservera>
+      <nameservera2></nameservera2>
+      <nameservera3></nameservera3>
+      <nameservera4></nameservera4>
+      <nameserverentry></nameserverentry>
+      <nameserverentry2></nameserverentry2>
+      <nameserverentry3></nameserverentry3>
+      <nameserverentry4></nameserverentry4>
+      <package>default</package>
+    </options>
+    <rawout>Checking input data...System has 0 free ips.
+...DoneWWWAcct 12.1.0 (c) 1997-2008 cPanel, Inc....
+
+Dns Zone check is enabled.
++===================================+
+| New Account Info                  |
++===================================+
+| Domain: example.com
+| Ip: 207.210.64.50 (n)
+| HasCgi: y
+| UserName: user
+| PassWord: password
+| CpanelMod: x3
+| HomeRoot: /home
+| Quota: 0 Meg
+| NameServer1: ns100.example.com
+| NameServer2: ns102.example.com
+| NameServer3: 
+| NameServer4: 
+| Contact Email: 
+| Package: default
+| Feature List: default
+| Language: english
++===================================+
+...DoneRunning pre creation script (/scripts/prewwwacct)......DoneAdding User...Removing Shell Access (n)
+...DoneCopying skel files from /home/swcom13/cpanel3-skel/ to /home/user/......DoneAdding Entries to httpd.conf......DoneSetting up Mail &amp; Local Domains...localdomains...valiases ...vdomainaliases...vfilters......DoneConfiguring DNS......DoneRestarting apache......DoneChanging password for user
+Password for user has been changed
+Updating Authentication Databases...Updating ftp passwords for user
+Ftp password files updated.
+Ftp vhost passwords synced
+Unable to find pgpass file.
+Unable to find pgpass file.
+...DoneVerifying MX Records and Setting up Databases......DoneSetting up Proxy Subdomains......DoneBind reconfiguring on r15 using rndc
+Sending Account Information......DoneSystem has 0 free ips.
+Running post creation scripts (/scripts/legacypostwwwacct, /scripts/postwwwacct, /scripts/postwwwacctuser)......Donewwwacct creation finished
+Setting up Domain Pointers......DoneSetting Reseller Privs......DoneAccount Creation Complete!!!...Account Creation Ok...Done</rawout>
+    <status>1</status>
+    <statusmsg>Account Creation Ok</statusmsg>
+  </result>
+</createacct>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

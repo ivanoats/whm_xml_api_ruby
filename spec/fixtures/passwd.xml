@@ -1,0 +1,33 @@
+<passwd>
+  <passwd>
+    <rawout>Changing password for user
+Password for user has been changed
+Updating ftp passwords for user
+Ftp password files updated.
+Ftp vhost passwords synced
+Unable to find pgpass file.
+</rawout>
+    <services>
+      <app>system</app>
+    </services>
+    <services>
+      <app>ftp</app>
+    </services>
+    <services>
+      <app>mail</app>
+    </services>
+    <services>
+      <app>mySQL</app>
+    </services>
+    <services>
+      <app>postgresql</app>
+    </services>
+    <services>
+      <app>FrontPage</app>
+    </services>
+    <status>1</status>
+    <statusmsg>Password changed for user user</statusmsg>
+  </passwd>
+</passwd>
+
+<!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->
