@@ -104,13 +104,12 @@ describe "A Whm Server" do
       lambda { @xml.list_accounts }.should raise_error( Whm::CommandFailed )
     end
 
-    it "should display an error message" do
+    it "should throw an exception when an account doesn't exist" do
       data = open(File.dirname(__FILE__) + '/fixtures/error2.xml').read
       @xml.connection.should_receive(:get_xml).with('accountsummary',{:user => 'bad_account'}).and_return(data)
       lambda { @xml.account_summary('bad_account') }.should raise_error( Whm::CommandFailed )
     end
 
-      
   end
 end
 

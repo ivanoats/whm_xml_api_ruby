@@ -4,11 +4,11 @@
 # acccount setup, password resets, and other web hosting account info
 # Copyright (C) 2008 Ivan Storck
 # MIT License (see README.txt)
+
 module Whm
-  VERSION = '0.0.1'
+  VERSION = '0.2.0'
   require 'rubygems'
   require 'net/https'
-  require 'xmlsimple'
   require 'hpricot'
   require 'uri'
   
@@ -25,12 +25,33 @@ module Whm
       attr_accessor :xml
     end
     
+    @@default_options = {}
+    
+    def self.all
+      raise NoConnection unless @xml
+      summary = @xml.list_accounts
+      
+      accounts = []
+      summary.search('acct').each do |acct|
+        account = Account.new
+        account.attributes = {}
+        acct = acct / '/*' #get attributes
+        acct.each do |node|
+          next if node.text? || node.comment? || !node.respond_to?( :name )
+          account.attributes[node.name] = node.inner_html
+        end
+        accounts << account
+      end
+      
+      accounts
+    end
+    
     def self.find(name)
       raise NoConnection unless @xml
       summary = @xml.account_summary(name)
       
       account = Account.new
-      
+      account.attributes = {}
       acct = (summary / 'acct/*')
       acct.each do |node|
         next if node.text? || node.comment? || !node.respond_to?( :name )
@@ -40,34 +61,39 @@ module Whm
       account
     end
     
+    def self.create(options)
+      @valid_options = %w(username domain plan pkgname savepkg featurelist quota password ip cgi frontpage hasshell contactemail cpmod maxftp maxsql maxpop maxlst maxsub maxpark maxaddon bwlimit customip language useregns hasuseregns reseller)
+      #TODO valid options
+      @xml.create_account(options)
+      find(options[:username])
+    end
+    
     def name
       self.attributes['user']
     end
     alias :user :name
     
-    def change_password(password)
-      @xml.change_account_password(user, password)
+    def password=(password)
+      Account.xml.change_account_password(user, password)
     end
     
-    def suspend( reason = '')
-      @xml.suspend_account(user, reason)
+    def suspend!( reason = '')
+      Account.xml.suspend_account(user, reason)
     end
     
-    def unsuspend
-      @xml.unsuspend_account(user)    
+    def unsuspend!
+      Account.xml.unsuspend_account(user)    
     end
     
-    def terminate( keepdns = "n")
-     @xml.terminate_account(user,keepdns) 
+    def terminate!( keepdns = "n")
+     Account.xml.terminate_account(user,keepdns) 
     end
     
     def package=( new_package)
-      @xml.change_package(user, new_package)
+      Account.xml.change_package(user, new_package)
     end
     
-    def create
-      #TODO create new account through Account.create      
-    end
+
     
     def save
       #TODO create new account through Account.new Account.save
@@ -79,6 +105,7 @@ module Whm
   class Connection
     
     attr_accessor :http
+    attr_accessor :debug
     
     def initialize(host, port, username, password)
       @user = username
@@ -89,11 +116,15 @@ module Whm
     
     def get_xml(url, options)
       @http.start {|http|
+        puts "REQUEST #{'/xml-api/' + url}" if debug
+
         req = Net::HTTP::Get.new('/xml-api/' + url)
         req.basic_auth @user, @password
         req.set_form_data(options) unless options.nil?
         response = http.request(req)
+        puts response.body if debug
         response.value
+        
         
         response.body
       }
@@ -109,7 +140,6 @@ module Whm
   class Xml
     
     attr_accessor :connection
-
     def initialize(host, port, user, pass)
       @connection = Connection.new(host,port,user,pass)
     end
@@ -191,7 +221,7 @@ module Whm
     
     def list_accounts
       data = get_xml("listaccts")
-      data && (data/:acct).inner_html
+      data# && (data/:acct).inner_html
     end
 
     # user

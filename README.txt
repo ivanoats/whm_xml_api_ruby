@@ -1,6 +1,6 @@
 whmxml
     by Ivan Storck
-    http://whmxml.rubyforge.org
+    http://github.com/ivanoats/whm_xml_api_ruby/
 
 == DESCRIPTION:
   
@@ -12,15 +12,40 @@ A ruby wrapper to the WHM XML API. WHM stands for Web Host Manager and is able t
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+require 'rubygems'
+require 'whmxml'
+
+* Make a connection to your whm server
+
+  Whm::Account.xml = Whm::Xml.new('www.example.com',2087,'username','password')
+
+* Find all accounts
+  
+  @accounts = Whm::Account.all
+
+* Create a new account (see http://www.cpanel.net/plugins/xmlapi/createacct.html for valid options )   
+  @account= Whm::Account.create({:username => 'name', 'domain' => 'example.com'})
+  
+* Find an account and make changes
+  
+  @account = Whm::Account.find('username')
+  @account.password = "Updated Password"
+  @account.suspend!("You broke the rules")
+  @account.terminate!
+  
+* and view attributes
+
+  @account.attributes['domain']
+  @account.attributes['pkgname']
+  
 
 == REQUIREMENTS:
 
-* hpricot, simplexml
+* hpricot
 
 == INSTALL:
 
-* sudo gem install whmxml
+* sudo gem install whm_xml
 
 == LICENSE:
 
