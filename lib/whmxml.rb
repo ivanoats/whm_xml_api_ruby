@@ -16,7 +16,6 @@ module Whm
   class NoConnection < StandardError; end
   class CommandFailed < StandardError; end
   
-  #Account class is experimental
   class Account
     
     attr_accessor :attributes
@@ -68,10 +67,11 @@ module Whm
       find(options[:username])
     end
     
-    def name
+    #TODO normalize whm_xml goofiness: attribute on create is username, but in returned xml is user
+    def user
       self.attributes['user']
     end
-    alias :user :name
+    alias :name :user
     
     def password=(password)
       Account.xml.change_account_password(user, password)
@@ -93,13 +93,13 @@ module Whm
       Account.xml.change_package(user, new_package)
     end
     
-
-    
     def save
       #TODO create new account through Account.new Account.save
     end
     
-    #TODO why isn't it possible to update an account??
+    def update
+      #TODO update an account
+    end
   end
   
   class Connection
