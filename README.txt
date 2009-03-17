@@ -6,6 +6,8 @@ whmxml
   
 A ruby wrapper to the WHM XML API. WHM stands for Web Host Manager and is able to create/provision new cPanel web hosting accounts and other related functions. 
 
+API is not finalized, please use with caution.  
+
 == FEATURES/PROBLEMS:
   
 * list accounts, list packages, create accounts, change passwords, etc
