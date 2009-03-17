@@ -19,12 +19,16 @@ module Whm
   class Account
     
     attr_accessor :attributes
+    attr_accessor :writable_attributes
     
     class << self
       attr_accessor :xml
     end
     
-    @@default_options = {}
+    #TODO make this not goofy
+    @@default_attributes = {}
+    @@writable_attributes = %w(username domain plan pkgname savepkg featurelist quota password ip cgi frontpage hasshell contactemail cpmod maxftp maxsql maxpop maxlst maxsub maxpark maxaddon bwlimit customip language useregns hasuseregns reseller)
+    @@readonly_attributes = %w(disklimit diskused email ip owner partition plan startdate suspended suspendreason theme unix_startdate user)
     
     def self.all
       raise NoConnection unless @xml
@@ -33,7 +37,6 @@ module Whm
       accounts = []
       summary.search('acct').each do |acct|
         account = Account.new
-        account.attributes = {}
         acct = acct / '/*' #get attributes
         acct.each do |node|
           next if node.text? || node.comment? || !node.respond_to?( :name )
@@ -50,7 +53,6 @@ module Whm
       summary = @xml.account_summary(name)
       
       account = Account.new
-      account.attributes = {}
       acct = (summary / 'acct/*')
       acct.each do |node|
         next if node.text? || node.comment? || !node.respond_to?( :name )
@@ -61,18 +63,38 @@ module Whm
     end
     
     def self.create(options)
-      @valid_options = %w(username domain plan pkgname savepkg featurelist quota password ip cgi frontpage hasshell contactemail cpmod maxftp maxsql maxpop maxlst maxsub maxpark maxaddon bwlimit customip language useregns hasuseregns reseller)
+
       #TODO valid options
       @xml.create_account(options)
       find(options[:username])
     end
     
-    #TODO normalize whm_xml goofiness: attribute on create is username, but in returned xml is user
+    def initialize
+      self.attributes = {}
+      self.writable_attributes = {}
+    end
+    
     def user
       self.attributes['user']
     end
     alias :name :user
     
+    (@@readonly_attributes).each do |attribute|
+      define_method attribute do
+        self.attributes[attribute.to_s]
+      end
+    end
+
+    (@@writable_attributes).each do |attribute|
+      define_method attribute do
+        self.writable_attributes[attribute.to_s] || self.attributes[attribute.to_s] 
+      end
+      define_method "#{attribute}=" do |*parameters|
+        raise ArgumentError, "expected 1 parameter" unless parameters.length == 1
+        self.writable_attributes[attribute.to_s] = parameters.first
+      end
+    end
+
     def password=(password)
       Account.xml.change_account_password(user, password)
     end

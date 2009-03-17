@@ -107,4 +107,13 @@ describe "A Whm Account" do
     @account.package=("new_package").should == "new_package"
   end
   
+  it "should read an attribute" do
+    @account.domain.should == 'magic.example.com'
+  end
+  
+  it "should write an attribute" do
+    @account.username = 'newname'    
+    @account.username.should == 'newname'
+  end
+  
 end
