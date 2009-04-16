@@ -1,5 +1,22 @@
 module Whm #:nodoc:
-  module RequiresParameters #:nodoc:
+  # Allows for parameter requirements for methods
+  module RequiresParameters
+    # Check the included hash for the included parameters.
+    #
+    # ==== Example
+    #
+    # <tt>:username</tt> and <tt>:password</tt> are required parameters
+    #
+    #    requires!(options, :username, :password)
+    #
+    # So, if <tt>User.new</tt> doesn't pass these parameters, an
+    # ArgumentError exception is thrown.
+    #
+    #    >> User.new
+    #    ArgumentError: Missing required parameter: username
+    #
+    #    >> User.new(:username => "john")
+    #    ArgumentError: Missing required parameter: password
     def requires!(hash, *params)
       params.each do |param| 
         if param.is_a?(Array)
