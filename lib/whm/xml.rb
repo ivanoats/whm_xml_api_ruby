@@ -1,189 +1,197 @@
 module Whm #:nodoc:
   class Xml
-    attr_accessor :connection
+    include RequiresParameters
+    attr_reader :connection
     
-    def initialize(host, port, user, pass)
-      @connection = Connection.new(host, port, user, pass)
+    def initialize(options = {})
+      requires!(options, :username, :password, :host)
+      @connection = Connection.new(options)
     end
     
-    # Valid options for hash: 
-    # username (string)
-    # User name of the account. Ex: user
-    # domain (string)
-    # Domain name. Ex: domain.tld
-    # plan (string)
-    # Package to use for account creation. Ex: reseller_gold
-    # pkgname (string)
-    # Name of a new package to be created based on the settings used. Ex: reseller_silver
-    # savepkg (boolean)
-    # Save the settings used as a new package. (1 = yes, 0 = no)
-    # featurelist (string)
-    # Name of the feature list to be used when creating a new package. Ex: no_ftp_100mb_gold
-    # quota (integer)
-    # Disk space quota in MB. (0-999999, 0 is unlimited)
-    # password (string)
-    # Password to access cPanel. Ex: p@ss!w0rd$123
-    # ip (string)
-    # Whether or not the domain has a dedicated IP address. (y = Yes, n = No)
-    # cgi (boolean)
-    # Whether or not the domain has cgi access. (1 = Yes, 0 = No)
-    # frontpage (boolean)
-    # Whether or not the domain has FrontPage extensions installed. (1 = Yes, 0 = No)
-    # hasshell (boolean)
-    # Whether or not the domain has shell / ssh access. (1 = Yes, 0 = No)
-    # contactemail (string)
-    # Contact email address for the account. Ex: user@otherdomain.tld
-    # cpmod (string)
-    # cPanel theme name. Ex: x3
-    # maxftp (string)
-    # Maximum number of FTP accounts the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxsql (string)
-    # Maximum number of SQL databases the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxpop (string)
-    # Maximum number of email accounts the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxlst (string)
-    # Maximum number of mailing lists the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxsub (string)
-    # Maximum number of subdomains the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxpark (string)
-    # Maximum number of parked domains the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # maxaddon (string)
-    # Maximum number of addon domains the user can create. (0-999999 | unlimited, null | 0 is unlimited)
-    # bwlimit (string)
-    # Bandiwdth limit in MB. (0-999999, 0 is unlimited)
-    # customip (string)
-    # Specific IP address for the site.
-    # language (string)
-    # Language to use in the account's cPanel interface. (ex. spanish-utf8)
-    # useregns (boolean)
-    # Use the registered nameservers for the domain instead of the ones configured on the server. (1 = Yes, 0 = No)
-    # hasuseregns (boolean)
-    # Set to 1 if you are using the above option.
-    # reseller (boolean)
-    # Give reseller privileges to the account. (1 = Yes, 0 = No)
+    # Creates a hosting account and sets up it's associated domain information.
+    #
+    # ==== Options
+    # * <tt>:username</tt> - Username of the account (string)
+    # * <tt>:domain</tt> - Domain name (string)
+    # * <tt>:pkgname</tt> - Name of a new package to be created based on the settings used (string)
+    # * <tt>:savepkg</tt> - Save the settings used as a new package (boolean)
+    # * <tt>:featurelist</tt> - Name of the feature list to be used when creating a new package (string)
+    # * <tt>:quota</tt> - Disk space quota in MB. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:password</tt> - User's password to access cPanel (string)
+    # * <tt>:ip</tt> - Whether or not the domain has a dedicated IP address, either <tt>"y"</tt> (Yes) or <tt>"n"</tt> (No) (string)
+    # * <tt>:cgi</tt> - Whether or not the domain has CGI access (boolean)
+    # * <tt>:frontpage</tt> - Whether or not the domain has FrontPage extensions installed (boolean)
+    # * <tt>:hasshell</tt> - Whether or not the domain has shell/SSH access (boolean)
+    # * <tt>:contactemail</tt> - Contact email address for the account (string)
+    # * <tt>:cpmod</tt> - cPanel theme name (string)
+    # * <tt>:maxftp</tt> - Maximum number of FTP accounts the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxsql</tt> - Maximum number of SQL databases the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxpop</tt> - Maximum number of email accounts the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxlst</tt> - Maximum number of mailing lists the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxsub</tt> - Maximum number of subdomains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxpark</tt> - Maximum number of parked domains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:maxaddon</tt> - Maximum number of addon domains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:bwlimit</tt> - Bandwidth limit in MB. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:customip</tt> - Specific IP for the site (string)
+    # * <tt>:language</tt> - Language to use in the account's cPanel interface (string)
+    # * <tt>:useregns</tt> - Use the registered nameservers for the domain instead of the ones configured on the server (boolean)
+    # * <tt>:hasuseregns</tt> - Must be set to <tt>1</tt> if the above <tt>:useregns</tt> is set to <tt>1</tt> (boolean)
+    # * <tt>:reseller</tt> - Give reseller privileges to the account (boolean)
     def create_account(options = {})
-	    data = get_xml("createacct",options)
-	    data && (data / 'createacct/result').inner_html
+      requires!(options, :domain, :username)
+      
+	    data = get_xml(:url => "createacct", :params => options)
     end
     
-    def change_account_password(user, password)
-      data = get_xml("passwd", {:user => user, :pass => password})
-	    data && (data / 'passwd/passwd').inner_html
+    # Changes the password of a domain owner (cPanel) or reseller (WHM) account.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username of the user whose password should be changed (string)
+    # * <tt>:pass</tt> - New password for that user (string)
+    def change_account_password(options = {})
+      requires!(options, :user, :pass)
+      
+      data = get_xml(:url => "passwd", :params => options)
+	    data["passwd"]
     end
     
-    # user (string)
-    # Name of user to modify the bandwidth usage (transfer) limit for.
-    # bwlimit (string)
-    # Bandwidth Usage (Transfer) Limit. (in MB)
-    def limit_bandwidth_usage( user, bwlimit )
-      data = get_xml("limitbw", {:user => user, :bwlimit => bwlimit})
-      data && (data / 'limitbw/result').inner_html
+    # Modifies the bandwidth usage (transfer) limit for a specific account.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Name of user to modify the bandwidth usage (transfer) limit for (string)
+    # * <tt>:bwlimit</tt> - Bandwidth usage (transfer) limit in MB (string)
+    def limit_bandwidth_usage(options = {})
+      requires!(options, :user, :bwlimit)
+      
+      data = get_xml(:url => "limitbw", :params => options)
+      data["bwlimit"]
     end
-    alias :limit_bandwidth :limit_bandwidth_usage
     
-    def list_accounts
-      data = get_xml("listaccts")
-      data# && (data/:acct).inner_html
+    # Lists all accounts on the server, or allows you to search for 
+    # a specific account or set of accounts.
+    #
+    # ==== Options
+    # * <tt>:searchtype</tt> - Type of account search (<tt>"domain"</tt>, <tt>"owner"</tt>, <tt>"user"</tt>, <tt>"ip"</tt> or <tt>"package"</tt>)
+    # * <tt>:search</tt> - Search criteria, in Perl regular expression format (string)
+    def list_accounts(options = {})
+      data = get_xml(:url => "listaccts", :params => options)
+      data["acct"]
     end
 
-    # user
-    # Username associated with the acount to display.
-    def account_summary( user )
-      data = get_xml("accountsummary", {:user => user})
-      data && (data/'accountsummary/acct').inner_html
-      data
+    # Displays pertient account information for a specific account.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username associated with the acount to display (string)
+    def account_summary(options = {})
+      requires!(options, :user)
+      
+      data = get_xml(:url => "accountsummary", :params => options)
+      data["acct"]
     end
     
-    # user
-    # Name of the user to suspend.
-    # reason
-    # Reason for suspension.
-    def suspend_account( user, reason = '' )
-      data = get_xml("suspendacct", {:user => user, :reason => reason})
-      data && (data/'suspendacct/result/statusmsg').inner_html
+    # Suspend an account. Returns <tt>true</tt> if it is successful, 
+    # or <tt>false</tt> if it is not.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username to suspend (string)
+    # * <tt>:reason</tt> - Reason for suspension (string)
+    def suspend_account(options = {})
+      requires!(options, :user, :reason)
+      
+      data = get_xml(:url => "suspendacct", :params => options)
+      data["status"] == "1" ? true : false
     end
     
-    # user
-    # Name of the user to suspend.
-    def unsuspend_account( user )
-      data = get_xml("unsuspendacct", {:user => user})
-      data && (data / 'unsuspendacct/result/statusmsg').inner_html
+    # Unsuspend a suspended account. Returns <tt>true</tt> if it
+    # is successful, or <tt>false</tt> if it is not.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username to unsuspend (string)
+    def unsuspend_account(options = {})
+      requires!(options, :user)
+      
+      data = get_xml(:url => "unsuspendacct", :params => options)
+      data["status"] == "1" ? true : false
     end
     
-    # user (string)
-    # User name to terminate.
-    # keepdns (string)
-    # Keep DNS entries for the domain (default is no, 1 | y = Yes, 0 | n = No, )
-    def terminate_account( user, keepdns = "n")
-      data = get_xml("removeacct", {:user => user, :keepdns => keepdns})
-      data && (data / 'removeacct/result/rawout').inner_html
+    # Terminates a hosting account. <b>Please note that this action is irreversible!</b>
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username to terminate (string)
+    # * <tt>:keepdns</tt> - Keep DNS entries for the domain ("y" or "n")
+    def terminate_account(options = {})
+      requires!(options, :user)
+            
+      data = get_xml(:url => "removeacct", :params => {
+        :user => options[:user], 
+        :keepdns => options[:keepdns] || "n"
+      })
     end
     
-    # user (string)
-    # User name of the account to change the package for.
-    # pkg (string)
-    # Name of the package that the account should use.
-    def change_package( user, package )
-      data = get_xml("changepackage", {:user => user, :pkg => package})
-      data && (data / 'changepackage/result/rawout').inner_html
+    # Changes the hosting package associated with an account.
+    # Returns <tt>true</tt> if it is successful, or 
+    # <tt>false</tt> if it is not.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username of the account to change the package for (string)
+    # * <tt>:pkg</tt> - Name of the package that the account should use (string)
+    def change_package(options = {})
+      requires!(options, :user, :pkg)
+      
+      data = get_xml(:url => "changepackage", :params => options)
+      data["status"] == "1" ? true : false
     end 
     
-    # list all hosting packages set up
+    # Lists all hosting packages that are available for use by 
+    # the current WHM user. If the current user is a reseller, 
+    # they may not see some packages that exist if those packages 
+    # are not available to be used for account creation at this time.
     def list_packages
-      data = get_xml('listpkgs')
-      data && (data / 'listpkgs').inner_html
+      data = get_xml(:url => "listpkgs")
+      data["package"]
     end
     
-    # returns a string with the host name of the WHM instance
+    # Displays the server's hostname.
     def hostname
-      data = get_xml('gethostname')
-      data && (data/:hostname).inner_html
+      data = get_xml(:url => "gethostname")
+      data["hostname"]
     end
     
     # Returns the cPanel WHM version
     def version
-      data = get_xml('version')
-      data && (data/:version/:version).inner_html
+      data = get_xml(:url => 'version')
+      data["version"]
     end
     
-    # Valid options for hash: 
-    # xemail (string)
-    # Email address of the domain owner.
-    # host (string)
-    # Domain the SSL certificate is for / SSL Host.
-    # country (string)
-    # Country the organization is located in.
-    # state (string)
-    # State the organization is located in.
-    # city (string)
-    # City the organization is located in
-    # co (string)
-    # Name of the organization / company.
-    # cod (string)
-    # Name of the department.
-    # email (string)
-    # Email to send the certificate to.
-    # pass (string)
-    # Certificate password.
-    def generate_certificate(options = {})
-      data = get_xml("generatessl", options)
-      #data && XmlSimple.xml_in( data.inner_html )
-      #TODO I cant get this to return anything but a blank response
-      ""
-    end
-    alias :generate_ssl_certificate :generate_certificate
-    alias :generate_ssl :generate_certificate
-    
-    
-    def get_xml(url, options = {})
-      xml = Hpricot.XML(@connection.get_xml(url, options))
-      if xml.at('result')
-        raise CommandFailed, xml.at('result/statusmsg').inner_html if xml.at('result/status').inner_html == "0"  
-      else
-        raise CommandFailed, xml.at('statusmsg').inner_html if xml.at('status').inner_html == "0"  
-      end
-      xml
+    # Generates an SSL certificate
+    #
+    # ==== Options
+    # * <tt>:xemail</tt> - Email address of the domain owner (string)
+    # * <tt>:host</tt> - Domain the SSL certificate is for, or the SSL host (string)
+    # * <tt>:country</tt> - Country the organization is located in (string)
+    # * <tt>:state</tt> - State the organization is located in (string)
+    # * <tt>:city</tt> - City the organization is located in (string)
+    # * <tt>:co</tt> - Name of the organization/company (string)
+    # * <tt>:cod</tt> - Name of the department (string)
+    # * <tt>:email</tt> - Email to send the certificate to (string)
+    # * <tt>:pass</tt> - Certificate password (string)
+    def generate_ssl_certificate(options = {})
+      requires!(options, :city, :co, :cod, :country, :email, :host, :pass, :state, :xemail)
+      data = get_xml(:url => "generatessl", :params => options)
     end
     
+    private
+    
+    # Grabs the XML and parse it
+    #
+    # ==== Options
+    # * <tt>:url</tt> - URL of the XML API function (string)
+    # * <tt>:params</tt> - Passed in parameter hash (hash)
+    def get_xml(options = {})
+      requires!(options, :url)      
+      xml = XmlSimple.xml_in(@connection.get_xml(:url => options[:url], :params => options[:params]), { 'ForceArray' => false })
+      
+      xml["result"].nil? ? xml : xml["result"]
+    end
   end
 end

@@ -1,11 +1,23 @@
+require File.dirname(__FILE__) + '/connection.rb'
+
 module Whm #:nodoc:
+  # The Account class, which is a subclass of the Connection class, performs 
+  # the account actions on the cPanel WHM server.
   class Account
+    include RequiresParameters
+    attr_accessor :attributes, :writable_attributes
+    attr_reader :xml
     
-    attr_accessor :attributes
-    attr_accessor :writable_attributes
-    
-    class << self
-      attr_accessor :xml
+    def initialize(options = {})
+      requires!(options, :username, :password, :host)
+      
+      @attributes = {}
+      @writable_attributes = {}
+      @xml ||= Whm::Xml.new(
+        :username => options[:username],
+        :password => options[:password],
+        :host => options[:host]
+      )
     end
     
     #TODO make this not goofy
@@ -13,7 +25,7 @@ module Whm #:nodoc:
     @@writable_attributes = %w(username domain plan pkgname savepkg featurelist quota password ip cgi frontpage hasshell contactemail cpmod maxftp maxsql maxpop maxlst maxsub maxpark maxaddon bwlimit customip language useregns hasuseregns reseller)
     @@readonly_attributes = %w(disklimit diskused email ip owner partition plan startdate suspended suspendreason theme unix_startdate user)
     
-    def self.all
+    def all
       raise NoConnection unless @xml
       summary = @xml.list_accounts
       
@@ -50,11 +62,6 @@ module Whm #:nodoc:
       #TODO valid options
       @xml.create_account(options)
       find(options[:username])
-    end
-    
-    def initialize
-      self.attributes = {}
-      self.writable_attributes = {}
     end
     
     def user

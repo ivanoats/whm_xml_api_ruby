@@ -1,15 +1,19 @@
 # Copyright (C) 2008-2009 Ivan Storck
 # MIT License (see README.txt)
 
+$:.unshift(File.dirname(__FILE__))
+
 require 'rubygems'
 require 'net/https'
-require 'hpricot'
+require 'xmlsimple'
 require 'uri'
 
-require File.dirname(__FILE__) + '/whm/account.rb'
-require File.dirname(__FILE__) + '/whm/connection.rb'
-require File.dirname(__FILE__) + '/whm/exceptions.rb'
-require File.dirname(__FILE__) + '/whm/xml.rb'
+require 'requires_parameters'
+
+require 'whm/account'
+require 'whm/connection'
+require 'whm/exceptions'
+require 'whm/xml'
 
 module Whm
   VERSION = '0.2.0'
