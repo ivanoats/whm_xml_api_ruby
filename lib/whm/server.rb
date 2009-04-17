@@ -1,11 +1,33 @@
 module Whm #:nodoc:
-  class Xml
-    include RequiresParameters
+  # The Server class contains all functions that can be run on a cPanel WHM server as of
+  # version 11.24.2
+  class Server
+    include Parameters
     attr_reader :connection
     
     def initialize(options = {})
       requires!(options, :username, :password, :host)
-      @connection = Connection.new(options)
+      @connection = Whm::Connection.new(options)
+      @attributes = {}
+    end
+    
+    def accounts
+      server_accounts = self.list_accounts
+      
+      unless server_accounts.empty?
+        @accounts = []
+        
+        for account in server_accounts
+          @accounts << Whm::Account.new(account.to_options)
+        end
+        
+        @accounts
+      else
+        nil
+      end
+    end
+    
+    def resellers
     end
     
     # Creates a hosting account and sets up it's associated domain information.
@@ -153,14 +175,20 @@ module Whm #:nodoc:
     
     # Displays the server's hostname.
     def hostname
+      return @attributes[:hostname] if @attributes[:hostname]
+      
       data = get_xml(:url => "gethostname")
-      data["hostname"]
+      @attributes.merge!(:hostname => data["hostname"])
+      @attributes[:hostname]
     end
     
     # Returns the cPanel WHM version
     def version
+      return @attributes[:version] if @attributes[:version]
+      
       data = get_xml(:url => 'version')
-      data["version"]
+      @attributes.merge!(:version => data["version"])
+      @attributes[:version]
     end
     
     # Generates an SSL certificate

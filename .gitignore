@@ -2,3 +2,4 @@ spec/generate_fixtures.rb
 *.gem
 .DS_Store
 html/
+test/test_config.yml

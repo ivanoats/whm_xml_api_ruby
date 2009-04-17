@@ -6,7 +6,6 @@ The following Ruby gems are required in order to use this gem:
 
 * xml-simple (>= 1.0.12)
 
-
 == Authors and credits
 
 Authors::     Ivan Storck, Padraic McGee, Josh Delsman
