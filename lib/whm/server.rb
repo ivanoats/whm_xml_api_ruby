@@ -1,33 +1,99 @@
 module Whm #:nodoc:
-  # The Server class contains all functions that can be run on a cPanel WHM server as of
-  # version 11.24.2
+  # The Server class initializes a new connection with the cPanel WHM server, and 
+  # contains all functions that can be run on a cPanel WHM server as of version 11.24.2.
   class Server
     include Parameters
-    attr_reader :connection
+
+    # Hostname of the WHM server (e.g., <tt>dedicated.server.com</tt>)
+    attr_reader :host
     
+    # WHM XML-API username
+    attr_reader :username
+    
+    # WHM XML-API password. Use this, or the remote key, to authenticate with the server
+    attr_reader :password
+    
+    # WHM XML-API remote key. Use this, or the password, to authenticate with the server
+    attr_reader :remote_key
+    
+    # If you'd like increased verbosity of commands, set this to <tt>true</tt>. Defaults to <tt>false</tt>
+    attr_accessor :debug
+    
+    attr_accessor :attributes
+    
+    # Initialize the connection with WHM using the hostname, 
+    # user and password/remote key. Will default to asking for 
+    # a password, but remote_key is required if a password 
+    # is not used.
+    #
+    # ==== Example
+    #
+    # Password authentication with debugging enabled:
+    #
+    #    Whm::Server.new(
+    #      :host => "dedicated.server.com",
+    #      :username => "root",
+    #      :password => "s3cUr3!p@5sw0rD",
+    #      :debug => true
+    #    )
+    #
+    # Remote key authentication with port 8000, and SSL to off (defaults to port 2087, and SSL on):
+    #
+    #    Whm::Server.new(
+    #      :host => "dedicated.server.com",
+    #      :username => "root",
+    #      :remote_key => "cf975b8930b0d0da69764c5d8dc8cf82 ...",
+    #      :port => 8000,
+    #      :ssl => false
+    #    )
     def initialize(options = {})
-      requires!(options, :username, :password, :host)
-      @connection = Whm::Connection.new(options)
-      @attributes = {}
-    end
-    
-    def accounts
-      server_accounts = self.list_accounts
+      requires!(options, :host, :username)
+      requires!(options, :password) unless options[:remote_key]
       
-      unless server_accounts.empty?
-        @accounts = []
-        
-        for account in server_accounts
-          @accounts << Whm::Account.new(account.to_options)
-        end
-        
-        @accounts
-      else
-        nil
-      end
+      @host       = options[:host]
+      @username   = options[:username] || "root"
+      @remote_key = options[:remote_key].gsub("\r\n", "") unless options[:password]
+      @password   = options[:password] unless options[:remote_key]
+      @debug      = options[:debug] || false
+      @port       = options[:port] || 2087
+      @ssl        = options[:ssl] || true
+    end
+
+    # Displays pertient account information for a specific account.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username associated with the acount to display (string)
+    def account_summary(options = {})
+      requires!(options, :user)
+      
+      data = get_xml(:url => "accountsummary", :params => options)
+      data["acct"]
     end
     
-    def resellers
+    # Changes the password of a domain owner (cPanel) or reseller (WHM) account.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username of the user whose password should be changed (string)
+    # * <tt>:pass</tt> - New password for that user (string)
+    def change_account_password(options = {})
+      requires!(options, :user, :pass)
+      
+      data = get_xml(:url => "passwd", :params => options)
+	    data["passwd"]
+    end
+    
+    # Changes the hosting package associated with an account.
+    # Returns <tt>true</tt> if it is successful, or 
+    # <tt>false</tt> if it is not.
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username of the account to change the package for (string)
+    # * <tt>:pkg</tt> - Name of the package that the account should use (string)
+    def change_package(options = {})
+      requires!(options, :user, :pkg)
+      
+      data = get_xml(:url => "changepackage", :params => options)
+      data["status"] == "1" ? true : false
     end
     
     # Creates a hosting account and sets up it's associated domain information.
@@ -65,16 +131,27 @@ module Whm #:nodoc:
 	    data = get_xml(:url => "createacct", :params => options)
     end
     
-    # Changes the password of a domain owner (cPanel) or reseller (WHM) account.
+    # Generates an SSL certificate
     #
     # ==== Options
-    # * <tt>:user</tt> - Username of the user whose password should be changed (string)
-    # * <tt>:pass</tt> - New password for that user (string)
-    def change_account_password(options = {})
-      requires!(options, :user, :pass)
-      
-      data = get_xml(:url => "passwd", :params => options)
-	    data["passwd"]
+    # * <tt>:xemail</tt> - Email address of the domain owner (string)
+    # * <tt>:host</tt> - Domain the SSL certificate is for, or the SSL host (string)
+    # * <tt>:country</tt> - Country the organization is located in (string)
+    # * <tt>:state</tt> - State the organization is located in (string)
+    # * <tt>:city</tt> - City the organization is located in (string)
+    # * <tt>:co</tt> - Name of the organization/company (string)
+    # * <tt>:cod</tt> - Name of the department (string)
+    # * <tt>:email</tt> - Email to send the certificate to (string)
+    # * <tt>:pass</tt> - Certificate password (string)
+    def generate_ssl_certificate(options = {})
+      requires!(options, :city, :co, :cod, :country, :email, :host, :pass, :state, :xemail)
+      data = get_xml(:url => "generatessl", :params => options)
+    end
+    
+    # Displays the server's hostname.
+    def hostname      
+      data = get_xml(:url => "gethostname")
+      data["hostname"]
     end
     
     # Modifies the bandwidth usage (transfer) limit for a specific account.
@@ -99,16 +176,14 @@ module Whm #:nodoc:
       data = get_xml(:url => "listaccts", :params => options)
       data["acct"]
     end
-
-    # Displays pertient account information for a specific account.
-    #
-    # ==== Options
-    # * <tt>:user</tt> - Username associated with the acount to display (string)
-    def account_summary(options = {})
-      requires!(options, :user)
-      
-      data = get_xml(:url => "accountsummary", :params => options)
-      data["acct"]
+    
+    # Lists all hosting packages that are available for use by 
+    # the current WHM user. If the current user is a reseller, 
+    # they may not see some packages that exist if those packages 
+    # are not available to be used for account creation at this time.
+    def list_packages
+      data = get_xml(:url => "listpkgs")
+      data["package"]
     end
     
     # Suspend an account. Returns <tt>true</tt> if it is successful, 
@@ -121,18 +196,6 @@ module Whm #:nodoc:
       requires!(options, :user, :reason)
       
       data = get_xml(:url => "suspendacct", :params => options)
-      data["status"] == "1" ? true : false
-    end
-    
-    # Unsuspend a suspended account. Returns <tt>true</tt> if it
-    # is successful, or <tt>false</tt> if it is not.
-    #
-    # ==== Options
-    # * <tt>:user</tt> - Username to unsuspend (string)
-    def unsuspend_account(options = {})
-      requires!(options, :user)
-      
-      data = get_xml(:url => "unsuspendacct", :params => options)
       data["status"] == "1" ? true : false
     end
     
@@ -150,76 +213,55 @@ module Whm #:nodoc:
       })
     end
     
-    # Changes the hosting package associated with an account.
-    # Returns <tt>true</tt> if it is successful, or 
-    # <tt>false</tt> if it is not.
+    # Unsuspend a suspended account. Returns <tt>true</tt> if it
+    # is successful, or <tt>false</tt> if it is not.
     #
     # ==== Options
-    # * <tt>:user</tt> - Username of the account to change the package for (string)
-    # * <tt>:pkg</tt> - Name of the package that the account should use (string)
-    def change_package(options = {})
-      requires!(options, :user, :pkg)
+    # * <tt>:user</tt> - Username to unsuspend (string)
+    def unsuspend_account(options = {})
+      requires!(options, :user)
       
-      data = get_xml(:url => "changepackage", :params => options)
+      data = get_xml(:url => "unsuspendacct", :params => options)
       data["status"] == "1" ? true : false
-    end 
-    
-    # Lists all hosting packages that are available for use by 
-    # the current WHM user. If the current user is a reseller, 
-    # they may not see some packages that exist if those packages 
-    # are not available to be used for account creation at this time.
-    def list_packages
-      data = get_xml(:url => "listpkgs")
-      data["package"]
     end
     
-    # Displays the server's hostname.
-    def hostname
-      return @attributes[:hostname] if @attributes[:hostname]
-      
-      data = get_xml(:url => "gethostname")
-      @attributes.merge!(:hostname => data["hostname"])
-      @attributes[:hostname]
-    end
-    
-    # Returns the cPanel WHM version
-    def version
-      return @attributes[:version] if @attributes[:version]
-      
+    # Returns the cPanel WHM version.
+    def version    
       data = get_xml(:url => 'version')
-      @attributes.merge!(:version => data["version"])
-      @attributes[:version]
-    end
-    
-    # Generates an SSL certificate
-    #
-    # ==== Options
-    # * <tt>:xemail</tt> - Email address of the domain owner (string)
-    # * <tt>:host</tt> - Domain the SSL certificate is for, or the SSL host (string)
-    # * <tt>:country</tt> - Country the organization is located in (string)
-    # * <tt>:state</tt> - State the organization is located in (string)
-    # * <tt>:city</tt> - City the organization is located in (string)
-    # * <tt>:co</tt> - Name of the organization/company (string)
-    # * <tt>:cod</tt> - Name of the department (string)
-    # * <tt>:email</tt> - Email to send the certificate to (string)
-    # * <tt>:pass</tt> - Certificate password (string)
-    def generate_ssl_certificate(options = {})
-      requires!(options, :city, :co, :cod, :country, :email, :host, :pass, :state, :xemail)
-      data = get_xml(:url => "generatessl", :params => options)
+      data["version"]
     end
     
     private
     
-    # Grabs the XML and parse it
+    # Grabs the XML response for a command to the server, and parses it.
     #
     # ==== Options
     # * <tt>:url</tt> - URL of the XML API function (string)
     # * <tt>:params</tt> - Passed in parameter hash (hash)
     def get_xml(options = {})
-      requires!(options, :url)      
-      xml = XmlSimple.xml_in(@connection.get_xml(:url => options[:url], :params => options[:params]), { 'ForceArray' => false })
+      requires!(options, :url)
       
-      xml["result"].nil? ? xml : xml["result"]
+      prefix = @ssl ? "https" : "http"
+      
+      request = Curl::Easy.new("#{prefix}://#{@host}:#{@port}/xml-api/#{options[:url]}") do |connection|
+        puts "WHM: Requesting #{options[:url]}..." if @debug
+        
+        connection.userpwd = "#{@username}:#{@password}" if @password
+        connection.headers["Authorization"] = "WHM #{@username}:#{@remote_key}" if @remote_key
+        connection.verbose = true if @debug
+        connection.timeout = 60
+        
+        unless options[:params].nil?
+          for key, value in options[:params]
+            connection.http_post(Curl::PostField.content(key.to_s, value))
+          end
+        end
+      end
+          
+      if request.perform
+        xml = XmlSimple.xml_in(request.body_str, { 'ForceArray' => false })
+        xml["result"].nil? ? xml : xml["result"]
+      end
     end
   end
 end

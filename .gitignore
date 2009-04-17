@@ -1,5 +1,6 @@
 spec/generate_fixtures.rb
 *.gem
 .DS_Store
+.autotest
 html/
 test/test_config.yml

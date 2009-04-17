@@ -5,8 +5,8 @@
     <bwlimitenable>0</bwlimitenable>
     <domains>domain.tld</domains>
     <domains>domain2.tld</domains>
-    <humanbw_limit>1 MB</human_bwlimit>
-    <humanbw_used>none</human_bwused>
+    <humanbw_limit>1 MB</humanbw_limit>
+    <humanbw_used>none</humanbw_used>
     <unlimited>0</unlimited>
     </bwlimit>
     <status>1</status>

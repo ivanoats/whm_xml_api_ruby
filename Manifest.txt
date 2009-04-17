@@ -1,7 +1,0 @@
-History.txt
-Manifest.txt
-README.txt
-Rakefile
-bin/whmxml
-lib/whmxml.rb
-test/test_whmxml.rb

@@ -8,7 +8,6 @@ require 'parameters'      # For parameter requirements in methods
 require 'validatable'     # For object validation
 
 require 'whm/exceptions'
-require 'whm/connection'
 require 'whm/server'
 require 'whm/account'
 
