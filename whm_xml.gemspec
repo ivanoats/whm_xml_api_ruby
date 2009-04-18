@@ -1,5 +1,3 @@
-require 'rake'
-
 Gem::Specification.new do |s|
   s.name    = 'whm_xml'
   s.version = '0.3.0'
