@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
-require 'whmxml'
+require 'whm_xml'
 require 'pp'
 
 describe "A WHM Server" do 
