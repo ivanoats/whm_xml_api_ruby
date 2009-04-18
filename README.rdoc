@@ -1,14 +1,66 @@
 = WHM XML-API Ruby Wrapper
 
+This is a Ruby wrapper for the cPanel WHM XML-API interface. It will allow you to perform multiple functions available on your cPanel WHM server. For more information on the XML-API, see the cPanel website at http://twiki.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/XmlApi.
+
 == Requirements
 
-The following Ruby gems are required in order to use this gem:
+The following Ruby gems are required to be installed in order to make use this gem:
 
-* xml-simple (>= 1.0.12)
+xml-simple (>= 1.0.12)::      http://xml-simple.rubyforge.org
+activesupport (>= 2.3.2)::    http://as.rubyonrails.org
+curb (>= 0.3.2)::             http://curb.rubyforge.org
+validatable (>= 1.6.7)::      http://validatable.rubyforge.org
+
+== Usage
+
+First off, you must have root access to a cPanel WHM server. With this gem, you can either use <b>password</b> or <b>remote access key</b> authentication. To get to the remote access key in WHM (which is likely the more secure method of connecting), go under "Cluster/Remote Access", and click on "Setup Remote Access Key". You can either copy the pre-generated one, or re-generate it.
+
+==== Installation
+
+You can install this gem simply by doing the following:
+
+    $ gem sources -a http://gems.github.com
+    $ gem install ivanoats-whm_xml_api_ruby
+
+You can also include it in a Rails project:
+
+    $ script/plugin install git://github.com/ivanoats/whm_xml_api_ruby.git
+
+==== Connecting
+
+To access the functions of the server, all you need to do is initialize a new Server class:
+
+    server = Whm::Server.new(
+      :username => "root",
+      :remote_access_key => "sd00fsd2i3rj...",
+      :host => "dedicated.server.com"
+    )
+    
+    server.version
+    => "11.24.2"
+    
+== Currently Available Methods
+
+As of WHM version 11.24.2, these are the methods that are available via this gem:
+
+* <tt>account_summary</tt>
+* <tt>change_account_password</tt>
+* <tt>change_package</tt>
+* <tt>create_account</tt>
+* <tt>generate_ssl_certificate</tt>
+* <tt>hostname</tt>
+* <tt>limit_bandwidth_usage</tt>
+* <tt>list_accounts</tt>
+* <tt>list_packages</tt>
+* <tt>modify_account</tt>
+* <tt>suspend_account</tt>
+* <tt>terminate_account</tt>
+* <tt>unsuspend_account</tt>
+* <tt>version</tt>
 
 == Authors and credits
 
-Authors::     Ivan Storck, Padraic McGee, Josh Delsman
+Authors::     Ivan Storck, Josh Delsman, Padraic McGee
 Home page::   http://github.com/ivanoats/whm_xml_api_ruby
 
 == License

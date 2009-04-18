@@ -211,7 +211,7 @@ module Whm #:nodoc:
     # * <tt>:shell</tt> - Whether or not the domain has shell/SSH access (boolean)
     # * <tt>:user</tt> - User name of the account (string)
     def modify_account(options = {})
-      booleans!(options, :shell)
+      booleans!(options, :HASCGI, :LANG, :shell)
       requires!(options, :user, :domain, :HASCGI, :CPTHEME, :LANG, :MAXPOP, :MAXFTP, :MAXLST, :MAXSUB, 
         :MAXPARK, :MAXADDON, :MAXSQL, :shell)
         
