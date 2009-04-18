@@ -1,4 +1,4 @@
 module Whm #:nodoc:
-  class CommandFailed < StandardError #:nodoc:
+  class CommandFailedError < StandardError #:nodoc:
   end
 end

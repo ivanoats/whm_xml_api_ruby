@@ -52,7 +52,7 @@ module Whm #:nodoc:
       
       @host       = options[:host]
       @username   = options[:username] || "root"
-      @remote_key = options[:remote_key].gsub("\r\n", "") unless options[:password]
+      @remote_key = options[:remote_key].gsub(/(\r|\n)/, "") unless options[:password]
       @password   = options[:password] unless options[:remote_key]
       @debug      = options[:debug] || false
       @port       = options[:port] || 2087
@@ -67,7 +67,7 @@ module Whm #:nodoc:
       requires!(options, :user)
       
       data = get_xml(:url => "accountsummary", :params => options)
-      data["acct"]
+      check_for_cpanel_errors_on(data)["acct"]
     end
     
     # Changes the password of a domain owner (cPanel) or reseller (WHM) account.
@@ -79,7 +79,7 @@ module Whm #:nodoc:
       requires!(options, :user, :pass)
       
       data = get_xml(:url => "passwd", :params => options)
-	    data["passwd"]
+	    check_for_cpanel_errors_on(data)["passwd"]
     end
     
     # Changes the hosting package associated with an account.
@@ -93,6 +93,8 @@ module Whm #:nodoc:
       requires!(options, :user, :pkg)
       
       data = get_xml(:url => "changepackage", :params => options)
+      check_for_cpanel_errors_on(data)
+      
       data["status"] == "1" ? true : false
     end
     
@@ -129,6 +131,7 @@ module Whm #:nodoc:
       requires!(options, :domain, :username)
       
 	    data = get_xml(:url => "createacct", :params => options)
+	    check_for_cpanel_errors_on(data)
     end
     
     # Generates an SSL certificate
@@ -146,12 +149,13 @@ module Whm #:nodoc:
     def generate_ssl_certificate(options = {})
       requires!(options, :city, :co, :cod, :country, :email, :host, :pass, :state, :xemail)
       data = get_xml(:url => "generatessl", :params => options)
+      check_for_cpanel_errors_on(data)
     end
     
     # Displays the server's hostname.
     def hostname      
       data = get_xml(:url => "gethostname")
-      data["hostname"]
+      check_for_cpanel_errors_on(data)["hostname"]
     end
     
     # Modifies the bandwidth usage (transfer) limit for a specific account.
@@ -163,7 +167,7 @@ module Whm #:nodoc:
       requires!(options, :user, :bwlimit)
       
       data = get_xml(:url => "limitbw", :params => options)
-      data["bwlimit"]
+      check_for_cpanel_errors_on(data)["bwlimit"]
     end
     
     # Lists all accounts on the server, or allows you to search for 
@@ -174,7 +178,7 @@ module Whm #:nodoc:
     # * <tt>:search</tt> - Search criteria, in Perl regular expression format (string)
     def list_accounts(options = {})
       data = get_xml(:url => "listaccts", :params => options)
-      data["acct"]
+      check_for_cpanel_errors_on(data)["acct"]
     end
     
     # Lists all hosting packages that are available for use by 
@@ -183,7 +187,37 @@ module Whm #:nodoc:
     # are not available to be used for account creation at this time.
     def list_packages
       data = get_xml(:url => "listpkgs")
-      data["package"]
+      check_for_cpanel_errors_on(data)["package"]
+    end
+    
+    # Modifies account specific settings. We recommend changing the 
+    # account's package instead with change_package. If the account 
+    # is associated with a package, the account's settings will be 
+    # changed whenever the package is changed. That may overwrite 
+    # any changes you make with this function.
+    #
+    # ==== Options
+    # * <tt>:CPTHEME</tt> - cPanel theme name (string)
+    # * <tt>:domain</tt> - Domain name (string)
+    # * <tt>:HASCGI</tt> - Whether or not the domain has CGI access (boolean)
+    # * <tt>:LANG</tt> - Language to use in the account's cPanel interface (boolean)
+    # * <tt>:MAXFTP</tt> - Maximum number of FTP accounts the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXSQL</tt> - Maximum number of SQL databases the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXPOP</tt> - Maximum number of email accounts the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXLST</tt> - Maximum number of mailing lists the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXSUB</tt> - Maximum number of subdomains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXPARK</tt> - Maximum number of parked domains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:MAXADDON</tt> - Maximum number of addon domains the user can create. Must be between 0-999999, with 0 being unlimited (integer)
+    # * <tt>:shell</tt> - Whether or not the domain has shell/SSH access (boolean)
+    # * <tt>:user</tt> - User name of the account (string)
+    def modify_account(options = {})
+      booleans!(options, :shell)
+      requires!(options, :user, :domain, :HASCGI, :CPTHEME, :LANG, :MAXPOP, :MAXFTP, :MAXLST, :MAXSUB, 
+        :MAXPARK, :MAXADDON, :MAXSQL, :shell)
+        
+      data = get_xml(:url => "modifyacct", :params => options)
+      
+      check_for_cpanel_errors_on(data)
     end
     
     # Suspend an account. Returns <tt>true</tt> if it is successful, 
@@ -196,6 +230,8 @@ module Whm #:nodoc:
       requires!(options, :user, :reason)
       
       data = get_xml(:url => "suspendacct", :params => options)
+      check_for_cpanel_errors_on(data)
+      
       data["status"] == "1" ? true : false
     end
     
@@ -211,6 +247,8 @@ module Whm #:nodoc:
         :user => options[:user], 
         :keepdns => options[:keepdns] || "n"
       })
+      
+      check_for_cpanel_errors_on(data)
     end
     
     # Unsuspend a suspended account. Returns <tt>true</tt> if it
@@ -222,13 +260,15 @@ module Whm #:nodoc:
       requires!(options, :user)
       
       data = get_xml(:url => "unsuspendacct", :params => options)
+      check_for_cpanel_errors_on(data)
+      
       data["status"] == "1" ? true : false
     end
     
     # Returns the cPanel WHM version.
     def version    
       data = get_xml(:url => 'version')
-      data["version"]
+      check_for_cpanel_errors_on(data)["version"]
     end
     
     private
@@ -242,6 +282,13 @@ module Whm #:nodoc:
       requires!(options, :url)
       
       prefix = @ssl ? "https" : "http"
+      params = []
+      
+      unless options[:params].nil?
+        for key, value in options[:params]
+          params << Curl::PostField.content(key.to_s, value)
+        end
+      end
       
       request = Curl::Easy.new("#{prefix}://#{@host}:#{@port}/xml-api/#{options[:url]}") do |connection|
         puts "WHM: Requesting #{options[:url]}..." if @debug
@@ -250,17 +297,29 @@ module Whm #:nodoc:
         connection.headers["Authorization"] = "WHM #{@username}:#{@remote_key}" if @remote_key
         connection.verbose = true if @debug
         connection.timeout = 60
-        
-        unless options[:params].nil?
-          for key, value in options[:params]
-            connection.http_post(Curl::PostField.content(key.to_s, value))
-          end
-        end
       end
           
-      if request.perform
+      if request.http_post(params)
         xml = XmlSimple.xml_in(request.body_str, { 'ForceArray' => false })
         xml["result"].nil? ? xml : xml["result"]
+      end
+    end
+    
+    # Returns the data, unless a <tt>status</tt> is equal to <tt>0</tt>,
+    # in which case a CommandFailedError exception is 
+    # thrown with the <tt>statusmsg</tt> from the fetched XML.
+    #
+    # If the command does not support status messaging,
+    # then just return the raw data.
+    def check_for_cpanel_errors_on(data)
+      if data["status"]
+        if data["status"] == 1
+          data
+        else
+          raise CommandFailedError, data["statusmsg"]
+        end
+      else
+        data
       end
     end
   end

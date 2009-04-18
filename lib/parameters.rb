@@ -1,7 +1,7 @@
 module Whm #:nodoc:
   # Allows for parameter requirements and validations for methods
   module Parameters
-    # Check the included hash for the included parameters.
+    # Check the included hash for the included parameters, and ensure they aren't blank.
     #
     # ==== Example
     # 
@@ -20,11 +20,22 @@ module Whm #:nodoc:
       params.each do |param| 
         if param.is_a?(Array)
           raise ArgumentError.new("Missing required parameter: #{param.first}") unless hash.has_key?(param.first) 
-
-          valid_options = param[1..-1]
-          raise ArgumentError.new("Parameter: #{param.first} must be one of #{valid_options.to_sentence(:connector => 'or')}") unless valid_options.include?(hash[param.first])
+          raise ArgumentError.new("Required parameter cannot be blank: #{param.first}") if hash[param.first].blank?
         else
           raise ArgumentError.new("Missing required parameter: #{param}") unless hash.has_key?(param) 
+          raise ArgumentError.new("Required parameter cannot be blank: #{param}") if hash[param].blank?
+        end
+      end
+    end
+    
+    # Checks to see if supplied params (which are booleans) contain
+    # either a 1 ("Yes") or 0 ("No") value.
+    def booleans!(hash, *params)
+      params.each do |param|
+        if param.is_a?(Array)
+          raise ArgumentError.new("Boolean parameter must be \"1\" or \"0\": #{param.first}") unless hash[param.first].to_s.match(/(1|0)/)          
+        else
+          raise ArgumentError.new("Boolean parameter must be \"1\" or \"0\": #{param}") unless hash[param].to_s.match(/(1|0)/)
         end
       end
     end
