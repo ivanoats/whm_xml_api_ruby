@@ -1,128 +1,195 @@
-require File.dirname(__FILE__) + '/spec_helper.rb'
-require 'whm_xml'
-require 'pp'
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'lib/whm_xml'
 
-describe "A WHM Server" do 
-  
+describe Whm::Server do 
   before do
-    @xml = Whm::Xml.new(
+    @server = Whm::Server.new(
       :username => "username",
       :password => "password",
-      :host => "www.example.com"
+      :host => "dedicated.server.com"
     )
   end
   
+  it "should build a server object" do
+    @server.should_not be_nil
+    
+    @server.host.should eql("dedicated.server.com")
+    @server.username.should eql("username")
+    @server.password.should eql("password")
+  end
+  
+  it "should have default options" do
+    @server.debug.should eql(false)
+    @server.ssl.should eql(true)
+    @server.port.should eql(2087)
+  end
+  
+  it "should handle successful commands from cPanel" do
+  end
+  
+  it "should handle unsuccessful commands from cPanel" do
+  end
+  
   it "should list accounts" do 
-    data = open('fixtures/listaccts.xml').read
-    @xml.should_receive(:get_xml).with({:url=>"listaccts", :params=>{}}).and_return(XmlSimple.xml_in(data))
-    @xml.list_accounts.should_not be_nil
+    data = open(File.expand_path('spec/fixtures/listaccts.xml')).read
+    
+    @server.expects(:list_accounts).returns(XmlSimple.xml_in(data))
+    @server.list_accounts.eql?(XmlSimple.xml_in(data))
   end
   
   it "should list packages" do
-    data = open('fixtures/listpkgs.xml').read
-    @xml.should_receive(:get_xml).with(:url => 'listpkgs').and_return(XmlSimple.xml_in(data))
-    @xml.list_packages.should_not be_nil
+    data = open('spec/fixtures/listpkgs.xml').read
+    
+    @server.expects(:list_packages).returns(XmlSimple.xml_in(data))
+    @server.list_packages.eql?(XmlSimple.xml_in(data))
   end
   
-  it "should display hostname" do
-    data = open(File.dirname(__FILE__) + '/fixtures/gethostname.xml').read
-    @xml.should_receive(:get_xml).with('gethostname').and_return(XmlSimple.xml_in(data))
-    @xml.hostname.should_not be_nil
+  it "should display the actual server hostname" do
+    data = open('spec/fixtures/gethostname.xml').read
+    
+    @server.expects(:hostname).returns(XmlSimple.xml_in(data)["hostname"])
+    @server.hostname.eql?("ns100.example.com")
+  end
+    
+  it "should display the actual server version" do
+    data = open('spec/fixtures/version.xml').read
+    
+    @server.expects(:version).returns(XmlSimple.xml_in(data)["version"])
+    @server.version.eql?("11.24.2")
+  end
+    
+  it "should generate ssl certificates" do
+    data = open('spec/fixtures/generatessl.xml').read
+    
+    params = {
+      :city => "Houston", 
+      :co => "Domain LLC", 
+      :cod => "Web", 
+      :country => "US", 
+      :email => "test@domain.com", 
+      :host => "domain.com", 
+      :pass => "password",
+      :state => "TX", 
+      :xemail => "test@domain.com"
+    }
+    
+    @server.expects(:generate_ssl_certificate).with(params).returns(XmlSimple.xml_in(data))
+    @server.generate_ssl_certificate(params).eql?(XmlSimple.xml_in(data))
   end
   
-  it "should display version" do
-    data = open(File.dirname(__FILE__) + '/fixtures/version.xml').read
-    @xml.should_receive(:get_xml).with('version').and_return(XmlSimple.xml_in(data))
-    @xml.version.should_not be_nil
+  it "should display account summaries" do
+    data = open('spec/fixtures/accountsummary.xml').read
+    
+    params = {
+      :user => "magic"
+    }
+    
+    @server.expects(:account_summary).with(params).returns(XmlSimple.xml_in(data))
+    @server.account_summary(params).eql?(XmlSimple.xml_in(data))
   end
   
-  it "should generate a ssl certificate" do
-    data = open(File.dirname(__FILE__) + '/fixtures/generatessl.xml').read
-    @xml.should_receive(:get_xml).with('generatessl',{}).and_return(XmlSimple.xml_in(data))
-    @xml.generate_certificate.should_not be_nil
+  it "should change packages" do
+    data = open('spec/fixtures/accountsummary.xml').read
+    
+    params = {
+      :user => "user",
+      :pkg => "new_plan"
+    }
+    
+    @server.expects(:change_package).with(params).returns(XmlSimple.xml_in(data))
+    @server.change_package(params).eql?(XmlSimple.xml_in(data))
   end
   
-  it "should generate a ssl certificate using an alias" do
-    data = open(File.dirname(__FILE__) + '/fixtures/generatessl.xml').read
-    @xml.should_receive(:get_xml).with('generatessl',{:xemail => "xemail"}).and_return(XmlSimple.xml_in(data))
-    @xml.generate_ssl_certificate({:xemail => "xemail"}).should_not be_nil
+  it "should create accounts" do
+    data = open('spec/fixtures/createacct.xml').read
+    
+    params = {
+      :user => "user",
+      :domain => "domain.com"
+    }
+    
+    @server.expects(:create_account).with(params).returns(XmlSimple.xml_in(data))
+    @server.create_account(params).eql?(XmlSimple.xml_in(data))
   end
   
-  describe "working with Accounts" do
-    before do
-      @account_options = {:username => 'test_account'}
-    end
+  it "should suspend accounts" do
+    data = open('spec/fixtures/suspendacct.xml').read
     
-    it "should create an account" do
-      data = open(File.dirname(__FILE__) + '/fixtures/createacct.xml').read
-      @xml.should_receive(:get_xml).with('createacct',@account_options).and_return(XmlSimple.xml_in(data))
-      @xml.create_account(@account_options).should_not be_nil
-    end
+    params = {
+      :user => "user",
+      :reason => "N/A"
+    }
     
-    it "should change account password" do
-      data = open(File.dirname(__FILE__) + '/fixtures/passwd.xml').read
-      @xml.should_receive(:get_xml).with('passwd',{:user => 'test_account', :pass => 'new_password'}).and_return(XmlSimple.xml_in(data))
-      @xml.change_account_password('test_account', 'new_password').should_not be_nil
-    end
-    
-    it "should limit bandwidth usage" do
-      data = open(File.dirname(__FILE__) + '/fixtures/limitbw.xml').read
-      @xml.should_receive(:get_xml).with('limitbw',{:user => 'test_account', :bwlimit => '100'}).and_return(XmlSimple.xml_in(data))
-      @xml.limit_bandwidth('test_account', '100').should_not be_nil
-    end
-    
-    it "should display account summary" do
-      data = open(File.dirname(__FILE__) + '/fixtures/accountsummary.xml').read
-      @xml.should_receive(:get_xml).with('accountsummary',{:user =>'test_account'}).and_return(XmlSimple.xml_in(data))
-      @xml.account_summary('test_account').should_not be_nil
-    end
-    
-    it "should suspend account" do
-      data = open(File.dirname(__FILE__) + '/fixtures/suspendacct.xml').read
-      @xml.should_receive(:get_xml).with('suspendacct',{:user =>'test_account', :reason => 'General Misbehaving'}).and_return(XmlSimple.xml_in(data))
-      @xml.suspend_account('test_account', 'General Misbehaving').should_not be_nil
-    end
-
-    it "should unsuspend account" do
-      data = open(File.dirname(__FILE__) + '/fixtures/unsuspendacct.xml').read
-      @xml.should_receive(:get_xml).with('unsuspendacct',{:user =>'test_account'}).and_return(XmlSimple.xml_in(data))
-      @xml.unsuspend_account('test_account').should_not be_nil
-    end
-
-    it "should terminate account" do
-      data = open(File.dirname(__FILE__) + '/fixtures/removeacct.xml').read
-      @xml.should_receive(:get_xml).with('removeacct',{:user =>'test_account', :keepdns => 'n'}).and_return(XmlSimple.xml_in(data))
-      @xml.terminate_account('test_account').should_not be_nil
-    end
-    
-    it "should change account package" do
-      data = open(File.dirname(__FILE__) + '/fixtures/changepackage.xml').read
-      @xml.should_receive(:get_xml).with('changepackage',{:user =>'test_account', :pkg => 'new_package'}).and_return(XmlSimple.xml_in(data))
-      @xml.change_package('test_account', 'new_package').should_not be_nil
-    end
-    
-    it "should display an error message" do
-      data = open(File.dirname(__FILE__) + '/fixtures/error.xml').read
-      @xml.connection.should_receive(:get_xml).with('listaccts',{}).and_return(data)
-      
-      lambda { @xml.list_accounts }.should raise_error( Whm::CommandFailed )
-    end
-
-    it "should throw an exception when an account doesn't exist" do
-      data = open(File.dirname(__FILE__) + '/fixtures/error2.xml').read
-      @xml.connection.should_receive(:get_xml).with('accountsummary',{:user => 'bad_account'}).and_return(data)
-      lambda { @xml.account_summary('bad_account') }.should raise_error( Whm::CommandFailed )
-    end
-
-  end
-end
-
-describe "A Nonexistant Server" do 
-  before do
-    @xml = Whm::Xml.new('localhost',2087,'username','password')
+    @server.expects(:suspend_account).with(params).returns(XmlSimple.xml_in(data))
+    @server.suspend_account(params).eql?(XmlSimple.xml_in(data))
   end
   
-  it "should exceptionize on connection failure" do
-    lambda { @xml.version }.should raise_error( Whm::CantConnect )
+  it "should unsuspend accounts" do
+    data = open('spec/fixtures/unsuspendacct.xml').read
+    
+    params = {
+      :user => "user"
+    }
+    
+    @server.expects(:unsuspend_account).with(params).returns(XmlSimple.xml_in(data))
+    @server.unsuspend_account(params).eql?(XmlSimple.xml_in(data))
+  end
+  
+  it "should terminate accounts" do
+    data = open('spec/fixtures/removeacct.xml').read
+    
+    params = {
+      :user => "user"
+    }
+    
+    @server.expects(:terminate_account).with(params).returns(XmlSimple.xml_in(data))
+    @server.terminate_account(params).eql?(XmlSimple.xml_in(data))
+  end
+  
+  it "should limit an account's bandwidth usage limit" do
+    data = open('spec/fixtures/limitbw.xml').read
+    
+    params = {
+      :user => "username",
+      :bwlimit => "1"
+    }
+    
+    @server.expects(:limit_bandwidth_usage).with(params).returns(XmlSimple.xml_in(data))
+    @server.limit_bandwidth_usage(params).eql?(XmlSimple.xml_in(data))
+  end
+  
+  it "should change account passwords" do
+    data = open('spec/fixtures/passwd.xml').read
+    
+    params = {
+      :user => "username",
+      :pass => "password"
+    }
+    
+    @server.expects(:change_account_password).with(params).returns(XmlSimple.xml_in(data))
+    @server.change_account_password(params).eql?(XmlSimple.xml_in(data))
+  end
+  
+  it "should modify accounts" do
+    data = open('spec/fixtures/modifyacct.xml').read
+        
+    params = {
+      :user => "user",
+      :domain => "domain.com",
+      :HASCGI => 0,
+      :CPTHEME => "x3",
+      :LANG => "english",
+      :MAXPOP => 3,
+      :MAXFTP => 0,
+      :MAXLST => 1,
+      :MAXSUB => 3,
+      :MAXPARK => 4,
+      :MAXADDON => 5,
+      :MAXSQL => 6,
+      :shell => 1
+    }
+    
+    @server.expects(:modify_account).with(params).returns(XmlSimple.xml_in(data))
+    @server.modify_account(params).eql?(XmlSimple.xml_in(data))
   end
 end

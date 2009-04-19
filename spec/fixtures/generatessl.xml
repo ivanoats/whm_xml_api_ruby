@@ -1,2 +1,84 @@
+<generatessl>
+  <results>
+    <key>-----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQCatM3uHDKtCX6+6INvRGGHsOBYcrnNTKj95a/cVDNV2idDXlK0
+    A8oFsPW0Ur3GQVItTh1Ufcf6bOL0V/Aqjuwbw+yVg/eOGurh34+rv75DoIqLGeh0
+    k0BGEAAyxU2U6D2S34ccH7Zh6nY48OZB/1LatSB9/96EYCxxaqNVunKQzwIDAQAB
+    AoGAbXVZcowu6rEaJTbbr8EBBIGH6eyaO4Bu3N1DFS/Z9ndYalj1SPqZWHeBEKmu
+    LfSPkRCAvgQUlsGtvlXtzh67PDwynP8kug4U7W3+k+BnrdWmKWVqHVfdBXNzDttc
+    mB0FBp8uHBT+Y0bjf7jKxqrMdwkqdsxcoMK4az2JYGgtH/ECQQDLGUUOlKFG7ux0
+    AA0FONKbvzIuf/Rdf9rKqj1LheD1y7kZ7W8SeBxnMa4a9nD21R6kK3L1Dtd7HW7K
+    pZpkX49pAkEAwwCzZoUkinN3qMnAKG3J2qzYDWc85LU4iVK+d+aGDb61ouFyVgi7
+    zBLP21P2swVaBxEDKjIDdJt6v+YRw2nPdwJBAIFBgtaltwJ62ld1FNRG9pqSkzBO
+    1MmQrkEfGUVwXdxwnEwo9PCPKpxuXLziLMCaoBahZFcb6/15nOIxhNHuk0kCQF2v
+    coFoqhuSSgTfmOBTjszuiYY2+TxwDE99X2C/cdwcqastYP8QhxkOWKpo9ncftRb8
+    B2c4TAyzvg9/+zzFExUCQQC6RUObtS5OjQiB8TJZgec6BIilhZQDvOklGK7VSwDq
+    Bvmvwm0Tnnvy+vEeSZa7RKzhrfck7zVfxe0R6EhQl5Wv
+    -----END RSA PRIVATE KEY-----
+    </key>
+    <args>
+      <city>Houston</city>
+      <co>Domain LLC</co>
+      <cod>Web</cod>
+      <country>US</country>
+      <email>test@domain.com</email>
+      <host>domain.com</host>
+      <pass>password</pass>
+      <state>TX</state>
+      <xemail>test@domain.com</xemail>
+    </args>
+    <cert>-----BEGIN CERTIFICATE-----
+    MIIDZTCCAs6gAwIBAgIBADANBgkqhkiG9w0BAQQFADCBhDELMAkGA1UEBhMCVVMx
+    CzAJBgNVBAgTAlRYMRAwDgYDVQQHEwdIb3VzdG9uMRMwEQYDVQQKEwpEb21haW4g
+    TExDMQwwCgYDVQQLEwNXZWIxEzARBgNVBAMTCmRvbWFpbi5jb20xHjAcBgkqhkiG
+    9w0BCQEWD3Rlc3RAZG9tYWluLmNvbTAeFw0wODEwMzAxNTIxNTBaFw0wOTEwMzAx
+    NTIxNTBaMIGEMQswCQYDVQQGEwJVUzELMAkGA1UECBMCVFgxEDAOBgNVBAcTB0hv
+    dXN0b24xEzARBgNVBAoTCkRvbWFpbiBMTEMxDDAKBgNVBAsTA1dlYjETMBEGA1UE
+    AxMKZG9tYWluLmNvbTEeMBwGCSqGSIb3DQEJARYPdGVzdEBkb21haW4uY29tMIGf
+    MA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCatM3uHDKtCX6+6INvRGGHsOBYcrnN
+    TKj95a/cVDNV2idDXlK0A8oFsPW0Ur3GQVItTh1Ufcf6bOL0V/Aqjuwbw+yVg/eO
+    Gurh34+rv75DoIqLGeh0k0BGEAAyxU2U6D2S34ccH7Zh6nY48OZB/1LatSB9/96E
+    YCxxaqNVunKQzwIDAQABo4HkMIHhMB0GA1UdDgQWBBQ1dRCHP34G2kUn3gHIruzg
+    rMJQAzCBsQYDVR0jBIGpMIGmgBQ1dRCHP34G2kUn3gHIruzgrMJQA6GBiqSBhzCB
+    hDELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlRYMRAwDgYDVQQHEwdIb3VzdG9uMRMw
+    EQYDVQQKEwpEb21haW4gTExDMQwwCgYDVQQLEwNXZWIxEzARBgNVBAMTCmRvbWFp
+    bi5jb20xHjAcBgkqhkiG9w0BCQEWD3Rlc3RAZG9tYWluLmNvbYIBADAMBgNVHRME
+    BTADAQH/MA0GCSqGSIb3DQEBBAUAA4GBAIqIw7/LKPneNeeE3lD0qZGn68sh5CE+
+    xqDWX+aJ5clalYUGGXDV4tjH9EYDn+YigtPPX9ti1vv0sBye6IjSgzlJWmqiLJuw
+    5Rl+gmRiCd131ZGUgX6s4Mk4XX4nKpUmHBlBiDUxt8kWn5PNwTS1IjOCPXQWiK9W
+    CDs344D5PDIe
+    -----END CERTIFICATE-----
+    </cert>
+    <certfile>/usr/share/ssl/certs/domain.com.crt</certfile>
+    <csr>-----BEGIN CERTIFICATE REQUEST-----
+    MIIB3jCCAUcCAQAwgYQxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJUWDEQMA4GA1UE
+    BxMHSG91c3RvbjETMBEGA1UEChMKRG9tYWluIExMQzEMMAoGA1UECxMDV2ViMRMw
+    EQYDVQQDEwpkb21haW4uY29tMR4wHAYJKoZIhvcNAQkBFg90ZXN0QGRvbWFpbi5j
+    b20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJq0ze4cMq0Jfr7og29EYYew
+    4Fhyuc1MqP3lr9xUM1XaJ0NeUrQDygWw9bRSvcZBUi1OHVR9x/ps4vRX8CqO7BvD
+    7JWD944a6uHfj6u/vkOgiosZ6HSTQEYQADLFTZToPZLfhxwftmHqdjjw5kH/Utq1
+    IH3/3oRgLHFqo1W6cpDPAgMBAAGgGTAXBgkqhkiG9w0BCQcxChMIcGFzc3dvcmQw
+    DQYJKoZIhvcNAQEEBQADgYEAUa2mBo4HzGJQ+v9pJX53A5rudj6a22ACoQw3yIYE
+    Cr9JVYxlmwdzn/XIUeKBVau8CVb/OaHH7i4rWt1eQNA8auiBfEqkp9fXPMnQWy2a
+    RoCieD63pPN+P/9PUQgM2wZdjixVQYLBAdPUnclk0HIJjD47nSxEI+7GtRq/Z4yI
+    XBk=
+    -----END CERTIFICATE REQUEST-----
+    </csr>
+    <csrfile>/usr/share/ssl/certs/domain.com.csr</csrfile>
+    <email_message>CSR email sent to test@domain.com</email_message>
+    <email_status>1</email_status>
+    <fglob>DUMMY</fglob>
+    <file_test>DUMMY</file_test>
+    <includes></includes>
+    <keyfile>/usr/share/ssl/private/domain.com.key</keyfile>
+    <message>Key, Certificate, and CSR generated OK</message>
+    <sender>admin</sender>
+    <sender_host>host.domain.com</sender_host>
+    <status>1</status>
+    <statusmsg>Key, Certificate, and CSR generated OK</statusmsg>
+    <uniq>DUMMY</uniq>
+    <wildcard_safe>DUMMY</wildcard_safe>
+  </results>
+</generatessl>
 
 <!-- Web Host Manager  (c) cPanel, Inc. 2008 http://cpanel.net/  Unauthorized copying is prohibited. -->

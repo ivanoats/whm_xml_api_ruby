@@ -1,0 +1,40 @@
+<modifyacct>
+  <result>
+    <messages>Changing shell for user.
+      Shell changed.
+    </messages>
+    <newcfg>
+      <cpuser>
+        <BWLIMIT>5242880000</BWLIMIT>
+        <CONTACTEMAIL>owner@domain.com</CONTACTEMAIL>
+        <CONTACTEMAIL2></CONTACTEMAIL2>
+        <DEADDOMAINS>oldsub.domain.com</DEADDOMAINS>
+        <DEMO>0</DEMO>
+        <DOMAIN>domain.com</DOMAIN>
+        <DOMAINS>sub.domain.com</DOMAINS>
+        <DOMAINS>addondomain.com</DOMAINS>
+        <FEATURELIST>reseller_gold</FEATURELIST>
+        <HASCGI>0</HASCGI>
+        <IP>192.168.1.1</IP>
+        <LANG>english</LANG>
+        <MAXADDON>5</MAXADDON>
+        <MAXFTP>0</MAXFTP>
+        <MAXLST>1</MAXLST>
+        <MAXPARK>4</MAXPARK>
+        <MAXPOP>3</MAXPOP>
+        <MAXSQL>6</MAXSQL>
+        <MAXSUB>3</MAXSUB>
+        <OWNER>root</OWNER>
+        <PLAN>reseller_gold</PLAN>
+        <RS>x3</RS>
+        <STARTDATE>1175808157</STARTDATE>
+        <USER>user</USER>
+      </cpuser>
+      <domain>domain.com</domain>
+      <setshell>/bin/bash</setshell>
+      <user>user</user>
+    </newcfg>
+    <status>1</status>
+    <statusmsg>Account Modified</statusmsg>
+  </result>
+</modifyacct>

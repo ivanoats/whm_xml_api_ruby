@@ -1,5 +1,6 @@
 begin
   require 'spec'
+  require 'factory_girl'
 rescue LoadError
   require 'rubygems'
   gem 'rspec'
@@ -8,8 +9,13 @@ end
 
 dir = File.dirname(__FILE__)
 
-$:.unshift(File.join(dir, '/../lib/'))
-    
+$:.unshift(File.join(dir, '/lib/'))
+
+# Enable mocha mocking/stubbing
+Spec::Runner.configure do |config|
+  config.mock_with :mocha
+end
+
 def stdout_for(&block)
   # Inspired by http://www.ruby-forum.com/topic/58647
   old_stdout = $stdout

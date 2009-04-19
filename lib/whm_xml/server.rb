@@ -19,6 +19,12 @@ module Whm #:nodoc:
     # If you'd like increased verbosity of commands, set this to <tt>true</tt>. Defaults to <tt>false</tt>
     attr_accessor :debug
     
+    # By default, SSL is enable. Set to <tt>false</tt> to disable it.
+    attr_accessor :ssl
+    
+    # By default, we connect on port 2087. Set this to another integer to change it.
+    attr_accessor :port
+    
     attr_accessor :attributes
     
     # Initialize the connection with WHM using the hostname, 
@@ -312,14 +318,12 @@ module Whm #:nodoc:
     # If the command does not support status messaging,
     # then just return the raw data.
     def check_for_cpanel_errors_on(data)
-      if data["status"]
-        if data["status"] == 1
-          data
-        else
-          raise CommandFailedError, data["statusmsg"]
-        end
+      result = data["result"].nil? ? data : data["result"]
+      
+      if result["status"] == "1"
+        result
       else
-        data
+        raise CommandFailedError, result["statusmsg"]
       end
     end
   end
