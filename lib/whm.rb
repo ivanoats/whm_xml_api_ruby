@@ -7,9 +7,9 @@ require 'active_support'  # For stringifying keys, etc.
 require 'parameters'      # For parameter requirements in methods
 require 'validatable'     # For object validation
 
-require 'whm_xml/exceptions'
-require 'whm_xml/server'
-require 'whm_xml/account'
+require 'whm/exceptions'
+require 'whm/server'
+require 'whm/account'
 
 module Whm
   VERSION = '0.3.0'

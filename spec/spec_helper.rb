@@ -1,6 +1,5 @@
 begin
   require 'spec'
-  require 'factory_girl'
 rescue LoadError
   require 'rubygems'
   gem 'rspec'
