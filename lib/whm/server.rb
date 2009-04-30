@@ -64,7 +64,26 @@ module Whm #:nodoc:
       @port       = options[:port] || 2087
       @ssl        = options[:ssl] || true
     end
+      
+    # Finds all accounts
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username associated with the acount to display (string)
+    def accounts(options = {})
+      summary = self.list_accounts(options)
+      summary = [summary] unless summary.is_a? Array
+      summary.collect { |attributes| Account.new(attributes) }
+    end
 
+    # Find an account
+    #
+    # ==== Options
+    # * <tt>:user</tt> - Username associated with the acount to display (string)
+    def account(name)
+      summary = self.account_summary(:user => name)
+      build_account(summary)
+    end
+    
     # Displays pertient account information for a specific account.
     #
     # ==== Options
@@ -284,7 +303,7 @@ module Whm #:nodoc:
     # ==== Options
     # * <tt>:url</tt> - URL of the XML API function (string)
     # * <tt>:params</tt> - Passed in parameter hash (hash)
-    def get_xml(options = {})
+    def get_xml(options = {}) 
       requires!(options, :url)
       
       prefix = @ssl ? "https" : "http"
@@ -306,6 +325,7 @@ module Whm #:nodoc:
       end
           
       if request.http_post(params)
+        puts "Response: #{request.body_str}" if @debug
         xml = XmlSimple.xml_in(request.body_str, { 'ForceArray' => false })
         xml["result"].nil? ? xml : xml["result"]
       end
@@ -319,12 +339,17 @@ module Whm #:nodoc:
     # then just return the raw data.
     def check_for_cpanel_errors_on(data)
       result = data["result"].nil? ? data : data["result"]
-      
-      if result["status"] == "1"
-        result
-      else
+      if result["status"] == "0"
         raise CommandFailedError, result["statusmsg"]
+      else
+        result
       end
+    end
+    
+    def build_account(attributes)  #:nodoc:
+      account = Account.new(attributes)
+      account.server = self
+      account
     end
   end
 end

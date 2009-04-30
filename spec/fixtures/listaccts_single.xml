@@ -1,0 +1,20 @@
+<listaccts>
+  <acct>
+    <disklimit>100M</disklimit>
+    <diskused>50M</diskused>
+    <domain>customer1.com</domain>
+    <email>customer1@example.com</email>
+    <ip>2.2.2.2</ip>
+    <owner>owner</owner>
+    <partition>home</partition>
+    <plan>plan_one</plan>
+    <startdate>10 Jan 30 21:19</startdate>
+    <suspended>0</suspended>
+    <suspendreason>not suspended</suspendreason>
+    <theme>x3</theme>
+    <unix_startdate>1033026362</unix_startdate>
+    <user>customer1</user>
+  </acct>
+  <status>1</status>
+  <statusmsg>Ok</statusmsg>
+</listaccts>
