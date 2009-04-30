@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.rdoc_options << '--inline-source' << '--charset=UTF-8'
   s.extra_rdoc_files = ['README.rdoc']
   
-  s.files = %w(Rakefile README.rdoc lib/parameters.rb lib/whm_xml/exceptions.rb lib/whm_xml/server.rb lib/whm_xml.rb spec/server_spec.rb spec/spec_helper.rb)
+  s.files = %w(Rakefile README.rdoc lib/parameters.rb lib/whm/exceptions.rb lib/whm/server.rb lib/whm.rb spec/server_spec.rb spec/spec_helper.rb)
   s.test_files = %w(spec/server_spec.rb)
 end
