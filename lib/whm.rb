@@ -7,10 +7,12 @@ require 'active_support'  # For stringifying keys, etc.
 require 'parameters'      # For parameter requirements in methods
 require 'validatable'     # For object validation
 
-require 'whm/exceptions'
-require 'whm/server'
-require 'whm/account'
+WHM_DIRECTORY = File.join(File.dirname(__FILE__),'whm')
+
+require File.join(WHM_DIRECTORY,'exceptions')
+require File.join(WHM_DIRECTORY,'server')
+require File.join(WHM_DIRECTORY,'account')
 
 module Whm
-  VERSION = '0.3.0'
+  VERSION = '0.3.1'
 end
