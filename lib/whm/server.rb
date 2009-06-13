@@ -102,6 +102,12 @@ module Whm #:nodoc:
       requires!(options, :user)
       
       params = { :searchtype => 'user', :search => options[:user] }
+
+      if options[:year] != nil && options[:month] != nil
+        params[:year] = options[:year]
+        params[:month] = options[:month]
+      end
+      
       data = get_xml(:url => "showbw", :params => params)
       check_for_cpanel_errors_on(data)["bandwidth"]["totalused"]
     end
