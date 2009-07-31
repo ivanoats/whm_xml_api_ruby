@@ -1,7 +1,10 @@
+require 'lib/whm'
+require 'rake'
+
 Gem::Specification.new do |s|
   s.name    = 'whm_xml'
-  s.version = '0.3.1'
-  s.date    = '2009-04-30'
+  s.version = Whm::VERSION
+  s.date    = Date.today.to_s
   
   s.authors = ["Ivan Storck", "Padraic McGee", "Josh Delsman"]
   s.summary = 'Web Host Manager (WHM) XML-API Ruby library'
@@ -19,6 +22,8 @@ Gem::Specification.new do |s|
   s.rdoc_options << '--inline-source' << '--charset=UTF-8'
   s.extra_rdoc_files = ['README.rdoc']
   
-  s.files = %w(Rakefile README.rdoc lib/parameters.rb lib/whm/account.rb lib/whm/exceptions.rb lib/whm/server.rb lib/whm.rb spec/account_spec.rb spec/server_spec.rb spec/spec_helper.rb)
+  #s.files = %w(Rakefile README.rdoc lib/parameters.rb lib/whm/account.rb lib/whm/exceptions.rb lib/whm/server.rb lib/whm.rb spec/account_spec.rb spec/server_spec.rb spec/spec_helper.rb)
+  s.files = FileList['lib/**/*.rb', '[A-Z]*', 'spec/**/*'].to_a
   s.test_files = %w(spec/server_spec.rb)
 end
+
