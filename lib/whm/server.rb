@@ -101,6 +101,17 @@ module Whm #:nodoc:
       check_for_cpanel_errors_on(data)["acct"]
     end
     
+    # Displays the total bandwidth used (in bytes) used by an account
+    # ==== Options
+    # * <tt>:user</tt> - username associtated with the account to display (string)
+    def account_total_bandwidth(options = {})
+      requires!(options, :user)
+      
+      params = { :searchtype => 'user', :search => options[:user] }
+      data = get_xml(:url => "showbw", :params => params)
+      check_for_cpanel_errors_on(data)["bandwidth"]["totalused"]
+    end
+    
     # Changes the password of a domain owner (cPanel) or reseller (WHM) account.
     #
     # ==== Options
