@@ -29,10 +29,11 @@ You can also include it in a Rails project:
 ==== Connecting
 
 To access the functions of the server, all you need to do is initialize a new Server class:
+    require 'whm'
 
     server = Whm::Server.new(
       :username => "root",
-      :remote_access_key => "sd00fsd2i3rj...",
+      :remote_key => "sd00fsd2i3rj...",
       :host => "dedicated.server.com"
     )
     
