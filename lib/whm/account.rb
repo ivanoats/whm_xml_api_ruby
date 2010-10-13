@@ -1,5 +1,5 @@
 module Whm
-  class Account < Server #:nodoc:
+  class Account #:nodoc:
     include Parameters, Validatable
     
     validates_presence_of :username, :domain, :groups => :creation

@@ -67,8 +67,6 @@ module Whm #:nodoc:
       
     # Finds all accounts
     #
-    # ==== Options
-    # * <tt>:user</tt> - Username associated with the acount to display (string)
     def accounts(options = {})
       summary = self.list_accounts(options)
       summary = [summary] unless summary.is_a? Array
@@ -82,6 +80,14 @@ module Whm #:nodoc:
     def account(name)
       summary = self.account_summary(:user => name)
       build_account(summary)
+    end
+    
+    # Finds all packages
+    #
+    def packages(options = {})
+      summary = self.list_packages
+      summary = [summary] unless summary.is_a? Array
+      summary.collect { |attributes| Package.new(attributes)}
     end
     
     # Displays pertient account information for a specific account.
@@ -164,7 +170,7 @@ module Whm #:nodoc:
     # * <tt>:hasuseregns</tt> - Must be set to <tt>1</tt> if the above <tt>:useregns</tt> is set to <tt>1</tt> (boolean)
     # * <tt>:reseller</tt> - Give reseller privileges to the account (boolean)
     def create_account(options = {})
-      requires!(options, :domain, :username)
+      requires!(options, :username)
       
 	    data = get_xml(:url => "createacct", :params => options)
 	    check_for_cpanel_errors_on(data)

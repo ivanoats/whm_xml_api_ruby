@@ -12,7 +12,9 @@ WHM_DIRECTORY = File.join(File.dirname(__FILE__),'whm')
 require File.join(WHM_DIRECTORY,'exceptions')
 require File.join(WHM_DIRECTORY,'server')
 require File.join(WHM_DIRECTORY,'account')
+require File.join(WHM_DIRECTORY,'package')
+
 
 module Whm
-  VERSION = '0.3.1'
+  VERSION = '0.3.2'
 end
