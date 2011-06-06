@@ -19,8 +19,7 @@ First off, you must have root access to a cPanel WHM server. With this gem, you 
 
 You can install this gem simply by doing the following:
 
-    $ gem sources -a http://gems.github.com
-    $ gem install ivanoats-whm_xml_api_ruby
+    $ gem install whm_xml_api_ruby
 
 You can also include it in a Rails project:
 
@@ -66,7 +65,7 @@ Home page::   http://github.com/ivanoats/whm_xml_api_ruby
 
 == License
 
-Copyright (c) 2008-2009 Ivan Storck
+Copyright (c) 2008-2011 Ivan Storck
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
