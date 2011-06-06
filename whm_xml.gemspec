@@ -1,4 +1,4 @@
-require 'lib/whm'
+require 'lib/whm.rb'
 require 'rake'
 
 Gem::Specification.new do |s|
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors = ["Ivan Storck", "Padraic McGee", "Josh Delsman"]
   s.summary = 'Web Host Manager (WHM) XML-API Ruby library'
   s.description = 'The whm_xml library provides a Ruby wrapper for the cPanel Web Host Manager (WHM) XML-API'
-  s.email = 'ivanoats+whm_xml@gmail.com'
+  s.email = 'ivan@ivanstorck.com'
   s.homepage = 'http://github.com/ivanoats/whm_xml_api_ruby'
   
   s.add_dependency('xml-simple', [">= 1.0.12"])

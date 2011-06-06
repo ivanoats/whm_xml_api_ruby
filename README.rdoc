@@ -1,4 +1,4 @@
-= WHM XML-API Ruby Wrapper
+= WHM_XML - A WHM XML API Wrapper for Ruby
 
 This is a Ruby wrapper for the cPanel WHM XML-API interface. It will allow you to perform multiple functions available on your cPanel WHM server. For more information on the XML-API, see the cPanel website at http://twiki.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/XmlApi.
 
@@ -19,7 +19,7 @@ First off, you must have root access to a cPanel WHM server. With this gem, you 
 
 You can install this gem simply by doing the following:
 
-    $ gem install whm_xml_api_ruby
+    $ gem install whm_xml
 
 You can also include it in a Rails project:
 
