@@ -1,4 +1,5 @@
-require '/lib/whm'
+$:.push File.expand_path("../lib", __FILE__)
+require 'whm'
 require 'rake'
 
 Gem::Specification.new do |s|

@@ -1,8 +1,7 @@
-require 'rspec'
-
-dir = File.dirname(__FILE__)
-
-$:.unshift(File.join(dir, '/lib/'))
+require 'rubygems'
+require 'bundler/setup'
+$:.push File.expand_path("../lib", __FILE__)
+require 'whm'
 
 # Enable mocha mocking/stubbing
 RSpec.configure do |c|

@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
-require 'lib/whm'
 require 'pp'
 
 describe "A Whm Account that doesn't exist" do

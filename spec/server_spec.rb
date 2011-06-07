@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require 'lib/whm'
 
 describe Whm::Server do 
   before do
