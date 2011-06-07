@@ -1,8 +1,17 @@
+PATH
+  remote: .
+  specs:
+    whm_xml (0.3.3)
+      activesupport (>= 2.3.2)
+      curb (>= 0.3.2)
+      validatable (>= 1.6.7)
+      xml-simple (>= 1.0.12)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (2.3.11)
-    curb (0.3.7)
+    activesupport (3.0.7)
+    curb (0.7.15)
     diff-lcs (1.1.2)
     mocha (0.9.12)
     rake (0.9.2)
@@ -22,11 +31,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (~> 2.3.2)
-  curb (~> 0.3.2)
   mocha (~> 0.9.12)
   rake
   rdoc
-  rspec
-  validatable (~> 1.6.7)
-  xml-simple (~> 1.0.12)
+  rspec (~> 2.6.0)
+  whm_xml!
