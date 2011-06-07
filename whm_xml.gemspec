@@ -1,10 +1,11 @@
-require 'lib/whm.rb'
+require '/lib/whm'
 require 'rake'
 
 Gem::Specification.new do |s|
   s.name    = 'whm_xml'
   s.version = Whm::VERSION
   s.date    = Date.today.to_s
+  s.require_paths = ["lib"]
   
   s.authors = ["Ivan Storck", "Padraic McGee", "Josh Delsman"]
   s.summary = 'Web Host Manager (WHM) XML-API Ruby library'
@@ -16,6 +17,11 @@ Gem::Specification.new do |s|
   s.add_dependency('activesupport', [">= 2.3.2"])
   s.add_dependency('curb', [">= 0.3.2"])
   s.add_dependency('validatable', [">= 1.6.7"])
+  
+  s.add_development_dependency('rspec',["~> 2.6.0"])
+  s.add_development_dependency('mocha', ["~> 0.9.12"])
+  s.add_development_dependency('rdoc')
+  s.add_development_dependency('rake')
   
   s.has_rdoc = true
   s.rdoc_options = ['--main', 'README.rdoc']

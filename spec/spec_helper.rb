@@ -1,18 +1,12 @@
-begin
-  require 'spec'
-rescue LoadError
-  require 'rubygems'
-  gem 'rspec'
-  require 'spec'
-end
+require 'rspec'
 
 dir = File.dirname(__FILE__)
 
 $:.unshift(File.join(dir, '/lib/'))
 
 # Enable mocha mocking/stubbing
-Spec::Runner.configure do |config|
-  config.mock_with :mocha
+RSpec.configure do |c|
+  c.mock_with :mocha
 end
 
 def stdout_for(&block)
