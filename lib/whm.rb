@@ -13,8 +13,3 @@ require File.join(WHM_DIRECTORY,'exceptions')
 require File.join(WHM_DIRECTORY,'server')
 require File.join(WHM_DIRECTORY,'account')
 require File.join(WHM_DIRECTORY,'package')
-
-
-module Whm
-  VERSION = '0.3.3'
-end
