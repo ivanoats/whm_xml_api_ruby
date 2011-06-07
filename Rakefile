@@ -1,4 +1,5 @@
 require 'bundler/gem_tasks'
+require 'bundler/setup'
 require 'rdoc/task'
 
 require 'rspec/core/rake_task'
