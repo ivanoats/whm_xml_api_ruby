@@ -1,4 +1,4 @@
-require 'rake/dsl_definition'
+#require 'rake/dsl_definition'
 require 'bundler/gem_tasks'
 require 'bundler/setup'
 require 'rdoc/task'
@@ -13,3 +13,5 @@ RDoc::Task.new do |rd|
   rd.title = "whm_xml -- A Ruby wrapper for cPanel's WHM XML API"
   rd.options << "--all"
 end
+
+task :default => :spec
