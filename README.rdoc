@@ -1,6 +1,6 @@
 = WHM_XML - A WHM XML API Wrapper for Ruby
 
-{<img src="http://travis-ci.org/ivanoats/whm_xml_api_ruby.png" />}[http://travis-ci.org/ivanoats/whm_xml_api_ruby]
+{<img src="https://travis-ci.org/ivanoats/whm_xml_api_ruby.png" />}[http://travis-ci.org/ivanoats/whm_xml_api_ruby]
 
 This is a Ruby wrapper for the cPanel WHM XML-API interface. It will allow you to perform multiple functions available on your cPanel WHM server. For more information on the XML-API, see the cPanel website at http://twiki.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/XmlApi.
 
