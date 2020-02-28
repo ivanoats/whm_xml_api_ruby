@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec',["~> 2.6.0"])
   s.add_development_dependency('mocha', ["~> 0.9.12"])
   s.add_development_dependency('rdoc')
-  s.add_development_dependency('rake', ["~> 0.9.2"])
+  s.add_development_dependency('rake', "~> 13.0.1")
   
   s.has_rdoc = true
   s.rdoc_options = ['--main', 'README.rdoc']
