@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency('activesupport', [">= 2.3.2"])
   s.add_dependency('curb', [">= 0.3.2"])
   s.add_dependency('validatable', [">= 1.6.7"])
-  s.add_dependency('i18n',["~> 0.6.0"])
+  s.add_dependency('i18n',">= 0.6", "< 1.11")
   
   s.add_development_dependency('rspec',["~> 2.6.0"])
   s.add_development_dependency('mocha', ["~> 0.9.12"])
